@@ -29,6 +29,7 @@ namespace MathTricks
             _SettingsManager.Update();
         }
 
+
         private void SetupSettingUI()
         {
             Point center = new Point(_WindowSize.X / 2, _WindowSize.Y / 2);
@@ -43,6 +44,7 @@ namespace MathTricks
 
             Rectangle modifierUITransform = new Rectangle(new Point((center.X - buttonSize.X / 2) - _ModifierButtonOffset,
                                                      center.Y - buttonSize.Y / 2), modifierButtonSize);
+
             Text columnNumText = new Text(Globals.FieldHeight.ToString(), _ArialFont, _WindowSize, _SettingsManager);
             Text rowNumText = new Text(Globals.FieldWidth.ToString(), _ArialFont, _WindowSize, _SettingsManager);
 
