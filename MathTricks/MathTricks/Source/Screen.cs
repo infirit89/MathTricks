@@ -19,8 +19,8 @@ namespace MathTricks
         MainMenu,
         Help,
         GameModes,
-        SinglePlayer,
-        MultiPlayer,
+        Settings,
+        Game,
         EndScreen
     }
 

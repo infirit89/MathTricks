@@ -10,6 +10,7 @@ namespace MathTricks
         }
 
         public void AddComponent(UIComponent component) => _UIComponents.Add(component);
+        public void ClearComponents() => _UIComponents.Clear();
 
         public void Update() 
         {

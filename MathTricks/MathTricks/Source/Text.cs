@@ -6,13 +6,16 @@ namespace MathTricks
     // centered text
     class Text : UIComponent
     {
-        public Text(string text, SpriteFont font, Rectangle bounds, UIManager manager)
+        public Text(string text, SpriteFont font, Rectangle bounds, UIManager manager, bool centerTransform = true)
             : base(new Rectangle(0, 0, 0, 0), manager)
         {
             _Text = text;
             _Font = font;
             _Bounds = bounds;
-            CenterTransform(_Bounds);
+            _IsCenterTransform = centerTransform;
+
+            if(centerTransform)
+                CenterTransform(_Bounds);
             Color = Color.Black;
         }
 
@@ -41,13 +44,15 @@ namespace MathTricks
         private string _Text;
         private Rectangle _Bounds;
         private SpriteFont _Font;
-        public string TextStr 
+        private bool _IsCenterTransform;
+        public string Value 
         {
             get => _Text;
             set 
             {
                 _Text = value;
-                CenterTransform(_Bounds);
+                if(_IsCenterTransform)
+                    CenterTransform(_Bounds);
             }
         }
     }

@@ -10,9 +10,17 @@ namespace MathTricks
         private Point _WindowSize;
         private Rectangle _SinglePlayerButtonRectangle;
         private Rectangle _MultiPlayerButtonRectangle;
-        
-        private void _SinglePlayerButtonEvent() => ApplicationManager.CurrentState = ApplicationState.SinglePlayer;
-        private void _MultiPlayerButtonEvent() => ApplicationManager.CurrentState = ApplicationState.MultiPlayer;
+
+        private void SinglePlayerButtonEvent()
+        {
+            Globals.IsSinglePlayer = true;
+            ApplicationManager.CurrentState = ApplicationState.Settings;
+        }
+        private void MultiPlayerButtonEvent()
+        {
+            Globals.IsSinglePlayer = false;
+            ApplicationManager.CurrentState = ApplicationState.Settings;
+        }
         
         public override void LoadContent(ContentManager manager) 
         {
@@ -27,8 +35,8 @@ namespace MathTricks
             Button _SinglePlayerButton = new Button(_SinglePlayerButtonRectangle, "SinglePlayer", _Font, _GameModeScreenManager);
             Button _MultiPlayerButton = new Button(_MultiPlayerButtonRectangle, "MultiPlayer", _Font, _GameModeScreenManager);
 
-            _SinglePlayerButton.OnButtonPressedEvent = _SinglePlayerButtonEvent;
-            _MultiPlayerButton.OnButtonPressedEvent = _MultiPlayerButtonEvent; 
+            _SinglePlayerButton.OnButtonPressedEvent = SinglePlayerButtonEvent;
+            _MultiPlayerButton.OnButtonPressedEvent = MultiPlayerButtonEvent; 
         }
 
         public GameModeSelectionScreen(Point WindowSize)

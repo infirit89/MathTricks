@@ -41,7 +41,7 @@ namespace MathTricks
 
         public void Lost(string winningPlayer)
         {
-            _Text.TextStr = $"{winningPlayer} has won!";
+            _Text.Value = $"{winningPlayer} has won!";
 
             _Text.Transform = new Rectangle(_Text.Transform.X, _Text.Transform.Y - 50,
                                             _Text.Transform.Width, _Text.Transform.Height);
