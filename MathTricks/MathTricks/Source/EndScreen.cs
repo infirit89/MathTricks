@@ -13,13 +13,14 @@ namespace MathTricks
         }
         public override void LoadContent(ContentManager manager)
         {
+            Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
             _Font = manager.Load<SpriteFont>("Salvar");
             _Text = new Text("Player 1 has won!", _Font, _WindowSize, _Manager);
             _Text.Color = Color.White;
             
             _ButtonTransform = new Rectangle(_WindowSize.X / 2 - _ButtonWidth / 2, _WindowSize.Y / 2, 
                                             _ButtonWidth, _ButtonHeight);
-            _Button = new Button(_ButtonTransform, "Main Menu", _Font, _Manager);
+            _Button = new Button(_ButtonTransform, "Main Menu", _Font, _Manager, _ButtonTexture);
             _Button.OnButtonPressedEvent = PlayButtonActionEvent;
 
             _pBackground = manager.Load<Texture2D>("bg");
