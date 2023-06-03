@@ -10,6 +10,7 @@ namespace MathTricks
             _Transform = new Rectangle(position, new Point(playerSize, playerSize));
             _PlayerTexture = texture;
             _PlayerColor = color;
+            Score = 0;
         }
 
         public void Draw()
@@ -20,7 +21,8 @@ namespace MathTricks
         public Color GetPlayerColor() => _PlayerColor;
 
         public Rectangle Transform { get => _Transform; set => _Transform = value; }
-        
+        public int Score;
+
         private Rectangle _Transform;
         private Texture2D _PlayerTexture;
         private Color _PlayerColor;

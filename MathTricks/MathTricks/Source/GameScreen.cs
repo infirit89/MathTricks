@@ -289,15 +289,15 @@ namespace MathTricks
             Text rowText = new Text("Row:", _ArialFont, _WindowSize, _SettingsManager);
             rowText.Color = Color.White;
 
-            Button plusColumnButton = new Button(modifierUITransform, "+", _ArialFont, _SettingsManager);
-            plusColumnButton.OnButtonPressedEvent = () =>
+            Button minusColumnButton = new Button(modifierUITransform, "-", _ArialFont, _SettingsManager);
+            minusColumnButton.OnButtonPressedEvent = () =>
             {
-                _FieldHeight++;
+                _FieldHeight--;
                 _FieldHeight = Math.Min(_FieldHeight, _MaxFieldSize.Y);
                 columnNumText.TextStr = _FieldHeight.ToString();
             };
 
-            columnText.Transform = new Rectangle(new Point(columnText.Transform.X - plusColumnButton.Transform.Width * 3,
+            columnText.Transform = new Rectangle(new Point(columnText.Transform.X - minusColumnButton.Transform.Width * 3,
                                                 columnText.Transform.Y - _ModifierButtonOffset),
                                                  columnText.Transform.Size);
 
@@ -306,15 +306,15 @@ namespace MathTricks
 
             modifierUITransform.Y += modifierButtonSize.Y + _ModifierButtonOffset;
 
-            Button plusRowButton = new Button(modifierUITransform, "+", _ArialFont, _SettingsManager);
+            Button minusRowButton = new Button(modifierUITransform, "-", _ArialFont, _SettingsManager);
 
-            rowText.Transform = new Rectangle(new Point(rowText.Transform.X - plusRowButton.Transform.Width * 3,
+            rowText.Transform = new Rectangle(new Point(rowText.Transform.X - minusRowButton.Transform.Width * 3,
                                                 rowText.Transform.Y + rowText.Transform.Height + _ModifierButtonOffset * 3),
                                                 rowText.Transform.Size);
 
-            plusRowButton.OnButtonPressedEvent = () =>
+            minusRowButton.OnButtonPressedEvent = () =>
             {
-                _FieldWidth++;
+                _FieldWidth--;
                 _FieldWidth = Math.Min(_FieldWidth, _MaxFieldSize.X);
                 rowNumText.TextStr = _FieldWidth.ToString();
                 rowNumText.Transform = new Rectangle(rowNumText.Transform.X,
@@ -326,10 +326,10 @@ namespace MathTricks
             modifierUITransform.Y -= modifierButtonSize.Y + _ModifierButtonOffset;
 
             modifierUITransform.X += modifierButtonSize.X * 3 + _ModifierButtonOffset;
-            Button minusColumnButton = new Button(modifierUITransform, "-", _ArialFont, _SettingsManager);
-            minusColumnButton.OnButtonPressedEvent = () =>
+            Button plusColumnButton = new Button(modifierUITransform, "+", _ArialFont, _SettingsManager);
+            plusColumnButton.OnButtonPressedEvent = () =>
             {
-                _FieldHeight--;
+                _FieldHeight++;
                 _FieldHeight = Math.Max(_FieldHeight, _MinFieldSize.Y);
 
                 columnNumText.TextStr = _FieldHeight.ToString();
@@ -343,10 +343,10 @@ namespace MathTricks
             rowNumText.Color = Color.White;
 
             modifierUITransform.Y += modifierButtonSize.Y + _ModifierButtonOffset;
-            Button minusRowButton = new Button(modifierUITransform, "-", _ArialFont, _SettingsManager);
-            minusRowButton.OnButtonPressedEvent = () =>
+            Button plusRowButton = new Button(modifierUITransform, "+", _ArialFont, _SettingsManager);
+            plusRowButton.OnButtonPressedEvent = () =>
             {
-                _FieldWidth--;
+                _FieldWidth++;
                 _FieldWidth = Math.Max(_FieldWidth, _MinFieldSize.X);
 
                 rowNumText.TextStr = _FieldWidth.ToString();
