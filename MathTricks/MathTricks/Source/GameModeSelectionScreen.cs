@@ -26,14 +26,14 @@ namespace MathTricks
         {
             _Font = manager.Load<SpriteFont>("Arial");
             
-            const int buttonWidth = 150;
-            const int buttonHeight = 50;
+            const int buttonWidth = 200;
+            const int buttonHeight = 70;
 
             _SinglePlayerButtonRectangle = new Rectangle(_WindowSize.X / 2 - buttonWidth/2, _WindowSize.Y / 2 - buttonHeight * 2, buttonWidth, buttonHeight);
             _MultiPlayerButtonRectangle = new Rectangle(_WindowSize.X / 2 - buttonWidth/2, _WindowSize.Y / 2 , buttonWidth, buttonHeight);
-            
-            Button _SinglePlayerButton = new Button(_SinglePlayerButtonRectangle, "SinglePlayer", _Font, _GameModeScreenManager);
-            Button _MultiPlayerButton = new Button(_MultiPlayerButtonRectangle, "MultiPlayer", _Font, _GameModeScreenManager);
+            Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
+            Button _SinglePlayerButton = new Button(_SinglePlayerButtonRectangle, "SinglePlayer", _Font, _GameModeScreenManager, _ButtonTexture);
+            Button _MultiPlayerButton = new Button(_MultiPlayerButtonRectangle, "MultiPlayer", _Font, _GameModeScreenManager, _ButtonTexture);
 
             _SinglePlayerButton.OnButtonPressedEvent = SinglePlayerButtonEvent;
             _MultiPlayerButton.OnButtonPressedEvent = MultiPlayerButtonEvent; 

@@ -8,6 +8,7 @@ namespace MathTricks
     {
         private MainScreen _MainScreen;
         private GameScreen _GameScreen;
+        private HelpScreen _HelpScreen;
         private EndScreen _EndScreen;
         private GameModeSelectionScreen _GameModeSelectionScreen;
         private SettingsScreen _SettingsScreen;
@@ -22,7 +23,7 @@ namespace MathTricks
         {
             _MainScreen = new MainScreen(Window.ClientBounds.Size);
             _EndScreen = new EndScreen(Window.ClientBounds.Size);  
-            
+            _HelpScreen = new HelpScreen(Window.ClientBounds.Size);
             _GameScreen = new GameScreen(Window.ClientBounds.Size);
             _GameModeSelectionScreen = new GameModeSelectionScreen(Window.ClientBounds.Size);
             _GameScreen.OnGameLostEvent = _EndScreen.Lost;
@@ -40,6 +41,7 @@ namespace MathTricks
         protected override void LoadContent()
         {
             _MainScreen.LoadContent(Content);
+            _HelpScreen.LoadContent(Content);
             _EndScreen.LoadContent(Content);
             _GameScreen.LoadContent(Content);
             _GameModeSelectionScreen.LoadContent(Content);

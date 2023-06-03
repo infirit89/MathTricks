@@ -19,19 +19,19 @@ namespace MathTricks
         {
             _Font = manager.Load<SpriteFont>("Arial");
             
-            const int buttonWidth = 150;
-            const int buttonHeight = 50;
+            const int buttonWidth = 200;
+            const int buttonHeight = 70;
 
             _PlayButtonRectanlge = new Rectangle(_WindowSize.X / 2 - buttonWidth/2, _WindowSize.Y / 2 - buttonHeight * 2, buttonWidth, buttonHeight);
             _HelpButtonRectangle = new Rectangle(_WindowSize.X / 2 - buttonWidth/2, _WindowSize.Y / 2 , buttonWidth, buttonHeight);
-            
-            Button _PlayButton = new Button(_PlayButtonRectanlge, "Play", _Font, _MainScreenManager);
-            Button _HelpButton = new Button(_HelpButtonRectangle, "Help", _Font, _MainScreenManager);
+            Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
+            Button _PlayButton = new Button(_PlayButtonRectanlge, "Play", _Font, _MainScreenManager, _ButtonTexture);
+            Button _HelpButton = new Button(_HelpButtonRectangle, "Help", _Font, _MainScreenManager, _ButtonTexture);
 
             _PlayButton.OnButtonPressedEvent = PlayButtonEvent;
             _HelpButton.OnButtonPressedEvent = HelpButtonEvent;
 
-            _pBackground = manager.Load<Texture2D>("unknown");
+            _pBackground = manager.Load<Texture2D>("bg");
             _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
 
