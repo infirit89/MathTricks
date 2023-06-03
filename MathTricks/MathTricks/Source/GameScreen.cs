@@ -8,6 +8,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MathTricks
 {
+    enum GameForamt 
+    {
+    }
+
     class GameScreen : Screen
     {
         struct SquareIndex 
@@ -69,6 +73,43 @@ namespace MathTricks
                     _Field[y, x] = new Square(squarePos, _SquareSize);
                     _Field[y, x].Text = new Text(squareValue, _ArialFont, _Field[y, x].Transform, _GameScreenUIManager);
                 }
+            }
+        }
+
+        private void EnsureAllActionsIncluded(List<string> actions)
+        {
+            var includedActions = new List<string>();
+
+            foreach (var cell in _Field)
+            {
+                includedActions.Add(cell.Text.Value[0].ToString());
+            }
+
+            foreach (var action in actions)
+            {
+                if (!includedActions.Contains(action))
+                {
+                    var cell = GetRandomCellWithoutAction(action);
+                    int numberIndex = 2;
+                    if (cell.Text.Value.Length == 2)
+                        numberIndex = 1;
+
+                    cell.Text.Value = $"{action} {cell.Text.Value[numberIndex]}";
+                }
+            }
+        }
+
+        private Square GetRandomCellWithoutAction(string action)
+        {
+            var random = new Random();
+
+            while (true)
+            {
+                var row = random.Next(_Field.GetLength(0));
+                var col = random.Next(_Field.GetLength(1));
+
+                if (_Field[row, col].Text.Value[0].ToString() != action)
+                    return _Field[row, col];
             }
         }
 
@@ -227,7 +268,7 @@ namespace MathTricks
                         _Player1.Score = CalculatePlayerScore(_Player1.Score, square.Text.Value);
                         _Player1ScoreText.Value = $"Player 1: {_Player1.Score}";
                     }
-                    else 
+                    else
                     {
                         _Player2.Transform = new Rectangle(newPlayerPosition, _Player2.Transform.Size);
                         _Player2.Score = CalculatePlayerScore(_Player2.Score, square.Text.Value);
@@ -235,13 +276,13 @@ namespace MathTricks
                     }
                     _Field[ind.Y, ind.X].PlayerIndex = _PlayerTurnCounter % 2;
 
+                    _PlayerTurnCounter++;
                     if (!ValidMoveExists())
                     {
                         OnGameLostEvent(_PlayerTurnCounter % 2 == 0 ? "Player 2" : "Player 1");
                         ApplicationManager.CurrentState = ApplicationState.EndScreen;
                     }
 
-                    _PlayerTurnCounter++;
                 }
             }
         }
