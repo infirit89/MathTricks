@@ -11,11 +11,9 @@ namespace MathTricks
         private Rectangle _SinglePlayerButtonRectangle;
         private Rectangle _MultiPlayerButtonRectangle;
         
-        
         private void _SinglePlayerButtonEvent() => ApplicationManager.CurrentState = ApplicationState.SinglePlayer;
         private void _MultiPlayerButtonEvent() => ApplicationManager.CurrentState = ApplicationState.MultiPlayer;
         
-
         public override void LoadContent(ContentManager manager) 
         {
             _Font = manager.Load<SpriteFont>("Arial");

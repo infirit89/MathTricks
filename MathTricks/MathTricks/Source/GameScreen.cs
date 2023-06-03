@@ -260,33 +260,6 @@ namespace MathTricks
             return validMoveExists;
         }
 
-        private void UpdateBoard(SquareIndex index)
-        {
-            
-            /*for (int i = 0; i < _Field.GetLength(0); i++)
-                _Field[i, index.X].CanPlacePiece = false;
-
-            for (int i = 0; i < _Field.GetLength(1); i++)
-                _Field[index.Y, i].CanPlacePiece = false;
-
-            for (int i = index.Y - 1, j = index.X - 1;
-                i >= 0 && j >= 0; i--, j--)
-                _Field[i, j].CanPlacePiece = false;
-
-            for (int i = index.Y + 1, j = index.X + 1;
-                i < _Field.GetLength(0) && j < _Field.GetLength(1); i++, j++)
-                _Field[i, j].CanPlacePiece = false;
-
-            for (int i = index.Y - 1, j = index.X + 1;
-                 i >= 0 && j < _Field.GetLength(1); i--, j++)
-                _Field[i, j].CanPlacePiece = false;
-
-            for (int i = index.Y + 1, j = index.X - 1;
-                i < _Field.GetLength(0) && j >= 0; i++, j--)
-                _Field[i, j].CanPlacePiece = false;
-*/
-        }
-
         private SquareIndex GetSquareIndexInMatrix(Square square)
         {
             // convert from square location to the square index in the field matrix
