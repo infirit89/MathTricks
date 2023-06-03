@@ -10,7 +10,8 @@ namespace MathTricks
         Right
     }
 
-    class OSMouse
+    // NOTE: wrapper with helper functions for the mouse
+    class MTMouse
     {
         public static void Update() 
         {

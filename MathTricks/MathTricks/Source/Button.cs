@@ -18,9 +18,9 @@ namespace MathTricks
 
         public override void Update() 
         {
-            _Hovered = OSMouse.GetMouseRect().Intersects(Transform);
+            _Hovered = MTMouse.GetMouseRect().Intersects(Transform);
 
-            if (_Hovered && OSMouse.IsButtonPressed(MouseButtons.Left) && OnButtonPressedEvent != null)
+            if (_Hovered && MTMouse.IsButtonPressed(MouseButtons.Left) && OnButtonPressedEvent != null)
                 OnButtonPressedEvent();
 
         }

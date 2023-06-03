@@ -30,6 +30,20 @@ namespace MathTricks
 
             _PlayButton.OnButtonPressedEvent = PlayButtonEvent;
             _HelpButton.OnButtonPressedEvent = HelpButtonEvent;
+            _EscapeFromHelpScreenButton.OnButtonPressedEvent = _EscapeFromHelpScreenButtonEvent;
+
+            /*using (StreamReader streamReader = new StreamReader(@"Content/Help.txt"))
+                _HelpText = streamReader.ReadToEnd();*/
+
+            _HelpText = "";
+
+            Text text = new Text(_HelpText, _Font, new Rectangle(offsetXAndEscapeButtonY, offsetY, _WindowSize.X , _WindowSize.Y ), _HelpScreenManager);
+            text.Transform = new Rectangle(0, offsetY, text.Transform.Width, text.Transform.Height);
+
+            text.Color = Color.White;
+
+            _pBackground = manager.Load<Texture2D>("unknown");
+            _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
 
         public MainScreen(Point WindowSize)
@@ -45,10 +59,14 @@ namespace MathTricks
             _MainScreenManager.Update();
         }
 
-        public override void Draw() 
+        public override void Draw()
         {
             GraphicsManager.AddQuad(_pBackgroundTransform, Color.White, _pBackground);
-            _MainScreenManager.Draw();
+
+            if (_HelpScreenIsShown)
+                _HelpScreenManager.Draw();
+            else
+                _MainScreenManager.Draw();
         }
 
         private UIManager _MainScreenManager;

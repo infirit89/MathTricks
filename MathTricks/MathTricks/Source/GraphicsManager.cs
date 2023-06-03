@@ -30,6 +30,8 @@ namespace MathTricks
         public static void AddText(Vector2 position, string text, SpriteFont font, Color color)
             => _SpriteBatch.DrawString(font, text, position, color);
 
+        public static GraphicsDeviceManager Grapgics { get => _Graphics; }
+
         private static GraphicsDeviceManager _Graphics;
         private static SpriteBatch _SpriteBatch;
         private static Texture2D _WhiteTexture;
