@@ -7,13 +7,14 @@ namespace MathTricks
     {
         public delegate void OnButtonPressed();
 
-        public Button(Rectangle buttonTransform, string text, SpriteFont font, UIManager manager)
+        public Button(Rectangle buttonTransform, string text, SpriteFont font, UIManager manager, Texture2D buttonTexture = null)
             : base(buttonTransform, manager)
         {
             _Text = new Text(text, font, Transform, manager);            
             ButtonColor = Color.White;
             HoveredButtonColor = Color.Gray;
             _Hovered = false;
+            _Texture = buttonTexture;
         }
 
         public override void Update() 
@@ -27,7 +28,7 @@ namespace MathTricks
 
         public override void Draw() 
         {
-            GraphicsManager.AddQuad(Transform, _Hovered ? HoveredButtonColor : ButtonColor);
+            GraphicsManager.AddQuad(Transform, _Hovered ? HoveredButtonColor : ButtonColor, _Texture);
         }
 
         public override Rectangle Transform 
@@ -42,6 +43,7 @@ namespace MathTricks
         }
         public OnButtonPressed OnButtonPressedEvent { private get; set; } = null;
         public Color ButtonColor, HoveredButtonColor;
+        private Texture2D _Texture;
         private Text _Text;
         private bool _Hovered;
     }
