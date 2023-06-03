@@ -13,7 +13,7 @@ namespace MathTricks
         }
         public override void LoadContent(ContentManager manager)
         {
-            _Font = manager.Load<SpriteFont>("Arial");
+            _Font = manager.Load<SpriteFont>("Salvar");
             _Text = new Text("Player 1 has won!", _Font, _WindowSize, _Manager);
             _Text.Color = Color.White;
             
@@ -22,7 +22,7 @@ namespace MathTricks
             _Button = new Button(_ButtonTransform, "Main Menu", _Font, _Manager);
             _Button.OnButtonPressedEvent = PlayButtonActionEvent;
 
-            _pBackground = manager.Load<Texture2D>("EndScreenB");
+            _pBackground = manager.Load<Texture2D>("bg");
             _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
         public override void Draw()

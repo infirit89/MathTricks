@@ -31,7 +31,7 @@ namespace MathTricks
             _PlayButton.OnButtonPressedEvent = PlayButtonEvent;
             _HelpButton.OnButtonPressedEvent = HelpButtonEvent;
 
-            _pBackground = manager.Load<Texture2D>("unknown");
+            _pBackground = manager.Load<Texture2D>("bg");
             _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
 

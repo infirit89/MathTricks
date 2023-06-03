@@ -124,7 +124,7 @@ namespace MathTricks
 
             SetupSettingUI();
 
-            _pBackground = manager.Load<Texture2D>("GameBackground");
+            _pBackground = manager.Load<Texture2D>("bg");
             _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
 
