@@ -136,7 +136,27 @@ namespace MathTricks
 
         public override void Update() 
         {
-            if (MTMouse.IsButtonPressed(MouseButtons.Left)) 
+            if (Globals.IsSinglePlayer)
+            {
+                if (MTMouse.IsButtonPressed(MouseButtons.Left))
+                {
+                    Square square = _Field.Cast<Square>().ToArray()
+                        .FirstOrDefault(x => x.Transform.Intersects(MTMouse.GetMouseRect()));
+                    PlacePiece(square);
+                }
+                else if (_PlayerTurnCounter % 2 == 1)
+                {
+                    foreach (var square in _Field.Cast<Square>().ToArray())
+                    {
+                        PlacePiece(square);
+                        if (_PlayerTurnCounter % 2 == 0)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (MTMouse.IsButtonPressed(MouseButtons.Left))
             {
                 Square square = _Field.Cast<Square>().ToArray().FirstOrDefault(x => x.Transform.Intersects(MTMouse.GetMouseRect()));                    
                 PlacePiece(square);
