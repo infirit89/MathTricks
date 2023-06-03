@@ -8,6 +8,7 @@ namespace MathTricks
     {
         private MainScreen _MainScreen;
         private GameScreen _GameScreen;
+        private HelpScreen _HelpScreen;
         private EndScreen _EndScreen;
         private GameModeSelectionScreen _GameModeSelectionScreen;
         public MTGame()
@@ -21,7 +22,7 @@ namespace MathTricks
         {
             _MainScreen = new MainScreen(Window.ClientBounds.Size);
             _EndScreen = new EndScreen(Window.ClientBounds.Size);  
-            
+            _HelpScreen = new HelpScreen(Window.ClientBounds.Size);
             _GameScreen = new GameScreen(Window.ClientBounds.Size);
             _GameModeSelectionScreen = new GameModeSelectionScreen(Window.ClientBounds.Size);
             _GameScreen.OnGameLostEvent = _EndScreen.Lost;
@@ -33,6 +34,7 @@ namespace MathTricks
         protected override void LoadContent()
         {
             _MainScreen.LoadContent(Content);
+            _HelpScreen.LoadContent(Content);
             _EndScreen.LoadContent(Content);
             _GameScreen.LoadContent(Content);
             _GameModeSelectionScreen.LoadContent(Content);
@@ -45,6 +47,7 @@ namespace MathTricks
             switch (ApplicationManager.CurrentState)
             {
                 case ApplicationState.MainMenu: _MainScreen.Update(); break;
+                case ApplicationState.Help: _HelpScreen.Update(); break;
                 case ApplicationState.GameModes: _GameModeSelectionScreen.Update(); break;
                 case ApplicationState.SinglePlayer:
                 case ApplicationState.MultiPlayer:
@@ -64,10 +67,10 @@ namespace MathTricks
             switch (ApplicationManager.CurrentState)
             {
                 case ApplicationState.MainMenu: _MainScreen.Draw(); break;
+                case ApplicationState.Help: _HelpScreen.Draw(); break;
                 case ApplicationState.GameModes: _GameModeSelectionScreen.Draw(); break;
                 case ApplicationState.SinglePlayer:
-                case ApplicationState.MultiPlayer:
-                    _GameScreen.Draw(); break;
+                case ApplicationState.MultiPlayer: _GameScreen.Draw(); break;
                 case ApplicationState.EndScreen: _EndScreen.Draw(); break;
             }
 

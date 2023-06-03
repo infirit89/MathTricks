@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,8 +24,8 @@ namespace MathTricks
 
             _EscapeFromHelpScreenButtonRectangle = new Rectangle(_WindowSize.X - (escapeButtonWidth + offsetXAndEscapeButtonY) , offsetXAndEscapeButtonY, escapeButtonWidth, escapeButtonHeight);
 
-            Button _EscapeFromHelpScreenButton = new Button(_EscapeFromHelpScreenButtonRectangle, "Back", _Font, _HelpScreenManager);
-
+            Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
+            Button _EscapeFromHelpScreenButton = new Button(_EscapeFromHelpScreenButtonRectangle, "Back", _Font, _HelpScreenManager, _ButtonTexture);
             _EscapeFromHelpScreenButton.OnButtonPressedEvent = _EscapeFromHelpScreenButtonEvent;
 
             using (StreamReader streamReader = new StreamReader(@"Content/Help.txt"))
@@ -34,9 +35,6 @@ namespace MathTricks
             text.Transform = new Rectangle(0, offsetY, text.Transform.Width, text.Transform.Height);
 
             text.Color = Color.White;
-
-            _pBackground = manager.Load<Texture2D>("bg");
-            _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
 
         public HelpScreen(Point WindowSize)
@@ -53,9 +51,7 @@ namespace MathTricks
 
         public override void Draw() 
         {
-            GraphicsManager.AddQuad(_pBackgroundTransform, Color.White, _pBackground);
             _HelpScreenManager.Draw();
-
         }
 
         private UIManager _HelpScreenManager;
