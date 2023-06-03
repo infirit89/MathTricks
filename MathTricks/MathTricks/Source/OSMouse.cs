@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Queens
+namespace MathTricks
 {
     enum MouseButtons 
     {

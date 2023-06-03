@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Queens
+namespace MathTricks
 {
     public static class Program
     {

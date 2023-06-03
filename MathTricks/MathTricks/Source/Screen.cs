@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Queens
+namespace MathTricks
 {
     abstract class Screen
     {
@@ -17,7 +17,10 @@ namespace Queens
     public enum ApplicationState
     {
         MainMenu,
-        Game,
+        Help,
+        GameModes,
+        SinglePlayer,
+        MultiPlayer,
         EndScreen
     }
 
