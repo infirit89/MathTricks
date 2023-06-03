@@ -1,17 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Queens
+namespace MathTricks
 {
     class Square
     {
         public Square(Vector2 squarePos, int squareSize)
         {
             Transform = new Rectangle(squarePos.ToPoint(), new Point(squareSize, squareSize));
-            CanPlaceQueen = true;
+            PlayerIndex = -1;
         }
 
         public Rectangle Transform { get; private set; }
-        public bool CanPlaceQueen;
+        public Text Text;
+        public int PlayerIndex;
     }
-
 }

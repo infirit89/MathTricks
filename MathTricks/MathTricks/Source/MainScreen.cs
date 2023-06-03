@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Queens
+namespace MathTricks
 {
     class MainScreen : Screen
     {
@@ -42,8 +42,10 @@ namespace Queens
             _HelpButton.OnButtonPressedEvent = HelpButtonEvent;
             _EscapeFromHelpScreenButton.OnButtonPressedEvent = _EscapeFromHelpScreenButtonEvent;
 
-            using (StreamReader streamReader = new StreamReader(@"Content/Help.txt"))
-                _HelpText = streamReader.ReadToEnd();
+            /*using (StreamReader streamReader = new StreamReader(@"Content/Help.txt"))
+                _HelpText = streamReader.ReadToEnd();*/
+
+            _HelpText = "";
 
             Text text = new Text(_HelpText, _Font, new Rectangle(offsetXAndEscapeButtonY, offsetY, _WindowSize.X , _WindowSize.Y ), _HelpScreenManager);
             text.Transform = new Rectangle(0, offsetY, text.Transform.Width, text.Transform.Height);
@@ -71,18 +73,14 @@ namespace Queens
                 _MainScreenManager.Update();
         }
 
-        public override void Draw() 
+        public override void Draw()
         {
             GraphicsManager.AddQuad(_pBackgroundTransform, Color.White, _pBackground);
 
-            if (_HelpScreenIsShown) {
+            if (_HelpScreenIsShown)
                 _HelpScreenManager.Draw();
-            }
-
             else
                 _MainScreenManager.Draw();
-            
-
         }
 
         private UIManager _MainScreenManager, _HelpScreenManager;

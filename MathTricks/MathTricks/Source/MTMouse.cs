@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Queens
+namespace MathTricks
 {
     enum MouseButtons 
     {
@@ -10,7 +10,8 @@ namespace Queens
         Right
     }
 
-    class OSMouse
+    // NOTE: wrapper with helper functions for the mouse
+    class MTMouse
     {
         public static void Update() 
         {

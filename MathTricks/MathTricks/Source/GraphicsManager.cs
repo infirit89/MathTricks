@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Queens
+namespace MathTricks
 {
     static class GraphicsManager
     {
@@ -29,6 +29,8 @@ namespace Queens
             => _SpriteBatch.Draw(texture == null ? _WhiteTexture : texture, transform, color);
         public static void AddText(Vector2 position, string text, SpriteFont font, Color color)
             => _SpriteBatch.DrawString(font, text, position, color);
+
+        public static GraphicsDeviceManager Grapgics { get => _Graphics; }
 
         private static GraphicsDeviceManager _Graphics;
         private static SpriteBatch _SpriteBatch;

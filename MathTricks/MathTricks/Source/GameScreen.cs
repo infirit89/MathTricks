@@ -6,13 +6,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Queens
+namespace MathTricks
 {
     class GameScreen : Screen
     {
         struct SquareIndex 
         {
             public int X, Y;
+        }
+
+        struct ValueRange 
+        {
+            public int Lower, Upper;
         }
 
         public delegate void OnGameLost(string winningPlayer);
@@ -24,38 +29,97 @@ namespace Queens
             _FieldHeight = 8;
             
             _WindowSize = windowSize;
-
             _SettingsManager = new UIManager();
-            _Pieces = new List<Piece>();
+            _GameScreenUIManager = new UIManager();
+            _Random = new Random();
+
+            _PlayerColor = new Color[2];
+            _PlayerColor[0] = Color.Cyan;
+            _PlayerColor[1] = Color.Orange;
+        }
+
+        private void GenerateBoard() 
+        {
+            _Field = new Square[_FieldHeight, _FieldWidth];
+
+            _FieldOffset = new Vector2(_WindowSize.X * 0.5f - (((_SquareSize + 2) * _Field.GetLength(1)) * 0.5f),
+                                       _WindowSize.Y * 0.5f - (((_SquareSize + 2) * _Field.GetLength(0)) * 0.5f));
+
+            List<string> actions = new List<string> { "", "-", "*", "/" };
+
+            for (int y = 0; y < _FieldHeight; y++)
+            {
+                for (int x = 0; x < _FieldWidth; x++)
+                {
+                    Vector2 squarePos = new Vector2((x * (_SquareSize + 2)) + _FieldOffset.X,
+                                                    (y * (_SquareSize + 2)) + _FieldOffset.Y);
+
+                    string squareValue = "";
+
+                    if (x == 0 && y == 0 || x == _FieldWidth - 1 && y == _FieldHeight - 1)
+                    {
+                        squareValue = "0";
+                    }
+                    else 
+                    {
+                        string action = actions[_Random.Next(actions.Count)];
+
+                        ValueRange range = GetValueRange(action);
+                        int number = _Random.Next(range.Lower, range.Upper);
+
+                        squareValue = $"{action} {number}";
+                    }
+                    _Field[y, x] = new Square(squarePos, _SquareSize);
+                    _Field[y, x].Text = new Text(squareValue, _ArialFont, _Field[y, x].Transform, _GameScreenUIManager);
+                }
+            }
+        }
+
+        private ValueRange GetValueRange(string action) 
+        {
+            ValueRange range = new ValueRange { Lower = 0, Upper = 9 };
+            switch (action)
+            {
+                case "":
+                case "-":
+                    break;
+                case "*":
+                    range.Upper = 2;
+                    break;
+                case "/":
+                    range.Lower = 1;
+                    break;
+            }
+
+            return range;
         }
 
         public void BeginGame() 
         {
-            _Field = new Square[_FieldHeight, _FieldWidth];
-            Vector2 fieldOffset = new Vector2(_WindowSize.X * 0.5f - (((_SquareSize + 2) * _Field.GetLength(1)) * 0.5f),
-                                              _WindowSize.Y * 0.5f - (((_SquareSize + 2) * _Field.GetLength(0)) * 0.5f));
+            GenerateBoard();
 
-            for (int y = 0; y < _Field.GetLength(0); y++)
-            {
-                for (int x = 0; x < _Field.GetLength(1); x++)
-                {
-                    Vector2 squarePos = new Vector2((x * (_SquareSize + 2)) + fieldOffset.X, 
-                                                    (y * (_SquareSize + 2)) + fieldOffset.Y);
-                    _Field[y, x] = new Square(squarePos, _SquareSize);
-                }
-            }
+            _Player1 = new Player(GetCeneteredPlayerPosition(_PlayerSize, _Field[0, 0].Transform.Location, _SquareSize),
+                                  _PlayerSize, Color.Blue);
+
+            _Player2 = new Player(GetCeneteredPlayerPosition(_PlayerSize, _Field[_FieldHeight - 1, _FieldWidth - 1].Transform.Location, _SquareSize),
+                                  _PlayerSize, Color.Yellow);
+
+            _Field[0, 0].PlayerIndex = 0;
+            _Field[_FieldHeight - 1, _FieldWidth - 1].PlayerIndex = 1;
 
             _PlayerTurnCounter = 0;
-            _Pieces.Clear();
 
             _HasGameBegun = true;
         }
 
+        private Point GetCeneteredPlayerPosition(int playerSize, Point squarePosition, int squareSize) 
+        {
+            return new Point((squareSize / 2) - (playerSize / 2) + squarePosition.X,
+                               (squareSize / 2) - (playerSize / 2) + squarePosition.Y);
+        }
+
         public override void LoadContent(ContentManager manager) 
         {
-            _QueenTexture = manager.Load<Texture2D>("WhiteQueenIcon");
-            _BlackQueenTexture = manager.Load<Texture2D>("BlackQueenIcon");
-
             _ArialFont = manager.Load<SpriteFont>("Arial");
 
             SetupSettingUI();
@@ -70,17 +134,9 @@ namespace Queens
                 _SettingsManager.Update();
             else 
             {
-                Square firstAvailSquare = _Field.Cast<Square>().ToArray().FirstOrDefault(x => x.CanPlaceQueen);
-                if (firstAvailSquare == null) 
+                if (MTMouse.IsButtonPressed(MouseButtons.Left)) 
                 {
-                    OnGameLostEvent(_PlayerTurnCounter % 2 == 0 ? "Player 2" : "Player 1");
-                    _HasGameBegun = false;
-                    ApplicationManager.CurrentState = ApplicationState.EndScreen;
-                }
-
-                if (OSMouse.IsButtonPressed(MouseButtons.Left)) 
-                {
-                    Square square = _Field.Cast<Square>().ToArray().FirstOrDefault(x => x.Transform.Intersects(OSMouse.GetMouseRect()));                    
+                    Square square = _Field.Cast<Square>().ToArray().FirstOrDefault(x => x.Transform.Intersects(MTMouse.GetMouseRect()));                    
                     PlacePiece(square);
                 }
             }
@@ -94,17 +150,40 @@ namespace Queens
                 _SettingsManager.Draw();
             else 
             {
-                for (int y = 0; y < _Field.GetLength(0); y++)
-                    for (int x = 0; x < _Field.GetLength(1); x++)
-                        GraphicsManager.AddQuad(_Field[y, x].Transform, _Field[y, x].CanPlaceQueen ? Color.White : Color.Gray);
+                for (int y = 0; y < _Field.GetLength(0); y++) 
+                {
+                    for (int x = 0; x < _Field.GetLength(1); x++) 
+                    {
+                        Color currentSquareColor = Color.White;
 
-                foreach (var piece in _Pieces)
-                    piece.Draw();
+
+                        if (_Field[y, x].PlayerIndex != -1)
+                            currentSquareColor = _PlayerColor[_Field[y, x].PlayerIndex];
+
+                        if (y == 0 && x == 0)
+                            currentSquareColor = _PlayerColor[0];
+                        else if (y == _FieldHeight - 1 && x == _FieldWidth - 1)
+                            currentSquareColor = _PlayerColor[1];
+
+
+                        GraphicsManager.AddQuad(_Field[y, x].Transform, currentSquareColor);
+                    } 
+                }
+
+                _Player1.Draw();
+                _Player2.Draw();
+
+                _GameScreenUIManager.Draw();
             } 
         }
 
-        private Texture2D GetCurrentPieceTexture() => _PlayerTurnCounter % 2 == 0 ? _QueenTexture : _BlackQueenTexture;
+        private Color GetCurrentPlayerColor()
+        {
+            if (_PlayerTurnCounter == 0)
+                return Color.White;
 
+            return _PlayerColor[_PlayerTurnCounter % 2 != 0 ? 0 : 1];
+        }
 
         private void PlacePiece(Square square)
         {
@@ -114,8 +193,20 @@ namespace Queens
 
                 if (IsMoveValid(ind))
                 {
-                    _Pieces.Add(new Piece(square.Transform.Location.ToVector2(), 50, GetCurrentPieceTexture()));
-                    UpdateBoard(ind);
+                    Point newPlayerPosition = GetCeneteredPlayerPosition(_PlayerSize, square.Transform.Location, _SquareSize);
+                    if (_PlayerTurnCounter % 2 == 0)
+                        _Player1.Transform = new Rectangle(newPlayerPosition, _Player1.Transform.Size);
+                    else
+                        _Player2.Transform = new Rectangle(newPlayerPosition, _Player2.Transform.Size);
+                    _Field[ind.Y, ind.X].PlayerIndex = _PlayerTurnCounter % 2;
+
+                    if (!ValidMoveExists())
+                    {
+                        OnGameLostEvent(_PlayerTurnCounter % 2 == 0 ? "Player 2" : "Player 1");
+                        _HasGameBegun = false;
+                        ApplicationManager.CurrentState = ApplicationState.EndScreen;
+                    }
+
                     _PlayerTurnCounter++;
                 }
             }
@@ -123,50 +214,84 @@ namespace Queens
 
         private bool IsMoveValid(SquareIndex index)
         {
-            if ((!_Field[index.Y, index.X].CanPlaceQueen) || !_Field[index.Y, index.X].CanPlaceQueen)
+            Player currentPlayer = _PlayerTurnCounter % 2 == 0 ? _Player1 : _Player2;
+            Square playerSquare = _Field.Cast<Square>().ToArray().FirstOrDefault(square => square.Transform.Intersects(currentPlayer.Transform));
+            SquareIndex playerSquareIndex = GetSquareIndexInMatrix(playerSquare);
+
+            int xDirection = Math.Abs(playerSquareIndex.X - index.X), yDirection = Math.Abs(playerSquareIndex.Y - index.Y);
+            if (xDirection > 1 || yDirection > 1)
+                return false;
+
+            if (_Field[index.Y, index.X].PlayerIndex != -1)
                 return false;
 
             return true;
         }
 
+        private bool ValidMoveExists() 
+        {
+            Player currentPlayer = _PlayerTurnCounter % 2 == 0 ? _Player1 : _Player2;
+            Square playerSquare = _Field.Cast<Square>().ToArray().FirstOrDefault(square => square.Transform.Intersects(currentPlayer.Transform));
+            SquareIndex playerSquareIndex = GetSquareIndexInMatrix(playerSquare);
+
+            bool validMoveExists = false;
+
+            if (playerSquareIndex.X + 1 < _FieldWidth && _Field[playerSquareIndex.Y, playerSquareIndex.X + 1].PlayerIndex == -1)
+                validMoveExists = true;
+            else if (playerSquareIndex.X - 1 >= 0 && _Field[playerSquareIndex.Y, playerSquareIndex.X - 1].PlayerIndex == -1)
+                validMoveExists = true;
+            else if (playerSquareIndex.Y + 1 > _FieldHeight && _Field[playerSquareIndex.Y + 1, playerSquareIndex.X].PlayerIndex == -1)
+                validMoveExists = true;
+            else if (playerSquareIndex.Y - 1 >= 0 && _Field[playerSquareIndex.Y - 1, playerSquareIndex.X].PlayerIndex == -1)
+                validMoveExists = true;
+            else if (playerSquareIndex.X + 1 < _FieldWidth && playerSquareIndex.Y + 1 < _FieldHeight &&
+                    _Field[playerSquareIndex.Y + 1, playerSquareIndex.X + 1].PlayerIndex == -1)
+                validMoveExists = true;
+            else if (playerSquareIndex.X - 1 >= 0 && playerSquareIndex.Y + 1 < _FieldHeight &&
+                    _Field[playerSquareIndex.Y + 1, playerSquareIndex.X - 1].PlayerIndex == -1)
+                validMoveExists = true;
+            else if (playerSquareIndex.X + 1 < _FieldWidth && playerSquareIndex.Y - 1 >= 0 &&
+                    _Field[playerSquareIndex.Y - 1, playerSquareIndex.X + 1].PlayerIndex == -1)
+                validMoveExists = true;
+            else if (playerSquareIndex.X - 1 >= 0 && playerSquareIndex.Y - 1 >= 0 &&
+                    _Field[playerSquareIndex.Y - 1, playerSquareIndex.X - 1].PlayerIndex == -1)
+                validMoveExists = true;
+
+            return validMoveExists;
+        }
+
         private void UpdateBoard(SquareIndex index)
         {
-            for (int i = 0; i < _Field.GetLength(0); i++)
-                _Field[i, index.X].CanPlaceQueen = false;
+            
+            /*for (int i = 0; i < _Field.GetLength(0); i++)
+                _Field[i, index.X].CanPlacePiece = false;
 
             for (int i = 0; i < _Field.GetLength(1); i++)
-                _Field[index.Y, i].CanPlaceQueen = false;
+                _Field[index.Y, i].CanPlacePiece = false;
 
             for (int i = index.Y - 1, j = index.X - 1;
                 i >= 0 && j >= 0; i--, j--)
-                _Field[i, j].CanPlaceQueen = false;
+                _Field[i, j].CanPlacePiece = false;
 
             for (int i = index.Y + 1, j = index.X + 1;
                 i < _Field.GetLength(0) && j < _Field.GetLength(1); i++, j++)
-                _Field[i, j].CanPlaceQueen = false;
+                _Field[i, j].CanPlacePiece = false;
 
             for (int i = index.Y - 1, j = index.X + 1;
                  i >= 0 && j < _Field.GetLength(1); i--, j++)
-                _Field[i, j].CanPlaceQueen = false;
+                _Field[i, j].CanPlacePiece = false;
 
             for (int i = index.Y + 1, j = index.X - 1;
                 i < _Field.GetLength(0) && j >= 0; i++, j--)
-                _Field[i, j].CanPlaceQueen = false;
-
+                _Field[i, j].CanPlacePiece = false;
+*/
         }
 
         private SquareIndex GetSquareIndexInMatrix(Square square)
         {
-            for (int y = 0; y < _Field.GetLength(0); y++)
-            {
-                for (int x = 0; x < _Field.GetLength(1); x++)
-                {
-                    if (_Field[y, x] == square)
-                        return new SquareIndex() { X = x, Y = y };
-                }
-            }
-
-            return new SquareIndex() { X = -1, Y = -1 };
+            // convert from square location to the square index in the field matrix
+            Vector2 squarePosition = square.Transform.Location.ToVector2();
+            return new SquareIndex() { X = (int)((squarePosition.X - _FieldOffset.X) / (_SquareSize + 2)), Y = (int)((squarePosition.Y - _FieldOffset.Y) / (_SquareSize + 2)) };
         }
 
         private void SetupSettingUI() 
@@ -269,14 +394,17 @@ namespace Queens
         private bool _HasGameBegun = false;
         private UIManager _SettingsManager;
         private SpriteFont _ArialFont;
-        private Texture2D _QueenTexture;
-        private Texture2D _BlackQueenTexture;
-        private List<Piece> _Pieces;
+        private Color[] _PlayerColor;
+        private const int _PlayerSize = 20;
+        private Player _Player1, _Player2;
         private int _PlayerTurnCounter;
         private Point _WindowSize;
         private int _FieldWidth, _FieldHeight;
         private const int _ButtonWidth = 150, _ButtonHeight = 50;
         private const int _ModifierButtonOffset = 10;
-        private Point _MinFieldSize = new Point(2, 2), _MaxFieldSize = new Point(15, 9);
+        private Point _MinFieldSize = new Point(4, 4), _MaxFieldSize = new Point(15, 9);
+        private UIManager _GameScreenUIManager;
+        private Random _Random;
+        private Vector2 _FieldOffset;
     }
 }

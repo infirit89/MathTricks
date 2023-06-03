@@ -4,7 +4,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
-namespace Queens
+namespace MathTricks
 {
     abstract class UIComponent
     {

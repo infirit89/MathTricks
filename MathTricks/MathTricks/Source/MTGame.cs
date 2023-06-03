@@ -1,15 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Queens
+namespace MathTricks
 {
-    public class QueensGame : Game
+
+    public class MTGame : Game
     {
         private MainScreen _MainScreen;
         private GameScreen _GameScreen;
         private EndScreen _EndScreen;
 
-        public QueensGame()
+        public MTGame()
         {
             GraphicsManager.Init(this);
             Content.RootDirectory = "Content";
@@ -23,13 +24,13 @@ namespace Queens
             
             _GameScreen = new GameScreen(Window.ClientBounds.Size);
             _GameScreen.OnGameLostEvent = _EndScreen.Lost;
+            GraphicsManager.CreateRenderer();
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            GraphicsManager.CreateRenderer();
             _MainScreen.LoadContent(Content);
             _EndScreen.LoadContent(Content);
             _GameScreen.LoadContent(Content);
@@ -37,7 +38,7 @@ namespace Queens
 
         protected override void Update(GameTime gameTime)
         {
-            OSMouse.Update();
+            MTMouse.Update();
 
             switch (ApplicationManager.CurrentState)
             {
