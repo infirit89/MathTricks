@@ -15,13 +15,16 @@ namespace MathTricks
 
         public override void Draw()
         {
+            GraphicsManager.AddQuad(_pBackgroundTransform, Color.White, _pBackground);
             _SettingsManager.Draw();
         }
 
         public override void LoadContent(ContentManager manager)
         {
             _ArialFont = manager.Load<SpriteFont>("Arial");
-            SetupSettingUI();
+            SetupSettingUI(manager);
+            _pBackground = manager.Load<Texture2D>("bg");
+            _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
 
         public override void Update()
@@ -29,15 +32,16 @@ namespace MathTricks
             _SettingsManager.Update();
         }
 
-        private void SetupSettingUI()
+        private void SetupSettingUI(ContentManager manager)
         {
             Point center = new Point(_WindowSize.X / 2, _WindowSize.Y / 2);
             Point buttonSize = new Point(_ButtonWidth, _ButtonHeight);
 
             Rectangle confirmButtonTransform = new Rectangle(new Point(center.X - buttonSize.X / 2,
                                                             _WindowSize.Y - 80), buttonSize);
+            Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
             Button confirmButton = new Button(confirmButtonTransform, "Confirm",
-                                                _ArialFont, _SettingsManager);
+                                                _ArialFont, _SettingsManager, _ButtonTexture);
 
             Point modifierButtonSize = new Point(40, 40);
 
@@ -51,7 +55,8 @@ namespace MathTricks
             Text rowText = new Text("Row:", _ArialFont, _WindowSize, _SettingsManager);
             rowText.Color = Color.White;
 
-            Button minusColumnButton = new Button(modifierUITransform, "-", _ArialFont, _SettingsManager);
+
+            Button minusColumnButton = new Button(modifierUITransform, "-", _ArialFont, _SettingsManager, _ButtonTexture);
             minusColumnButton.OnButtonPressedEvent = () =>
             {
                 Globals.FieldHeight--;
@@ -68,7 +73,7 @@ namespace MathTricks
 
             modifierUITransform.Y += modifierButtonSize.Y + _ModifierButtonOffset;
 
-            Button minusRowButton = new Button(modifierUITransform, "-", _ArialFont, _SettingsManager);
+            Button minusRowButton = new Button(modifierUITransform, "-", _ArialFont, _SettingsManager, _ButtonTexture);
 
             rowText.Transform = new Rectangle(new Point(rowText.Transform.X - minusRowButton.Transform.Width * 3,
                                                 rowText.Transform.Y + rowText.Transform.Height + _ModifierButtonOffset * 3),
@@ -88,7 +93,7 @@ namespace MathTricks
             modifierUITransform.Y -= modifierButtonSize.Y + _ModifierButtonOffset;
 
             modifierUITransform.X += modifierButtonSize.X * 3 + _ModifierButtonOffset;
-            Button plusColumnButton = new Button(modifierUITransform, "+", _ArialFont, _SettingsManager);
+            Button plusColumnButton = new Button(modifierUITransform, "+", _ArialFont, _SettingsManager, _ButtonTexture);
             plusColumnButton.OnButtonPressedEvent = () =>
             {
                 Globals.FieldHeight++;
@@ -105,7 +110,7 @@ namespace MathTricks
             rowNumText.Color = Color.White;
 
             modifierUITransform.Y += modifierButtonSize.Y + _ModifierButtonOffset;
-            Button plusRowButton = new Button(modifierUITransform, "+", _ArialFont, _SettingsManager);
+            Button plusRowButton = new Button(modifierUITransform, "+", _ArialFont, _SettingsManager, _ButtonTexture);
             plusRowButton.OnButtonPressedEvent = () =>
             {
                 Globals.FieldWidth++;

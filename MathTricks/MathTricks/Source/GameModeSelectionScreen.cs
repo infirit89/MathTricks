@@ -37,6 +37,9 @@ namespace MathTricks
 
             _SinglePlayerButton.OnButtonPressedEvent = SinglePlayerButtonEvent;
             _MultiPlayerButton.OnButtonPressedEvent = MultiPlayerButtonEvent; 
+            
+            _pBackground = manager.Load<Texture2D>("bg");
+            _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
 
         public GameModeSelectionScreen(Point WindowSize)
