@@ -38,6 +38,7 @@ bld/
 #wwwroot/
 
 # Rider cache directory 
+.idea/
 
 # Visual Studio 2017 auto generated files
 Generated\ Files/
