@@ -6,7 +6,12 @@ namespace MathTricks
     // centered text
     class Text : UIComponent
     {
-        public Text(string text, SpriteFont font, Rectangle bounds, UIManager manager, bool centerTransform = true)
+        public Text(
+                string text,
+                SpriteFont font,
+                Rectangle bounds,
+                UIManager manager,
+                bool centerTransform = true)
             : base(new Rectangle(0, 0, 0, 0), manager)
         {
             _Text = text;
@@ -27,7 +32,7 @@ namespace MathTricks
 
         public override void Draw()
         {
-            GraphicsManager.AddText(Transform.Location.ToVector2(), _Text, _Font, Color);
+            Renderer.AddText(Transform.Location.ToVector2(), _Text, _Font, Color);
         }
         public void CenterTransform(Rectangle bounds) 
         {
@@ -37,7 +42,8 @@ namespace MathTricks
             Transform = new Rectangle(textPos.ToPoint(), textSize.ToPoint());
         }
 
-        public void CenterTransform(Point size) => CenterTransform(new Rectangle(new Point(0, 0), size));
+        public void CenterTransform(Point size) 
+                                => CenterTransform(new Rectangle(new Point(0, 0), size));
 
         public Color Color { get; set; }
         

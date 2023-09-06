@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MathTricks
 {
-    static class GraphicsManager
+    static class Renderer
     {
-        public static void Init(Game game) 
+        public static void Init()
         {
-            _Graphics = new GraphicsDeviceManager(game);
-        }
-
-        public static void CreateRenderer() 
-        {
-            _SpriteBatch = new SpriteBatch(_Graphics.GraphicsDevice);
-            _WhiteTexture = new Texture2D(_Graphics.GraphicsDevice, 1, 1);
+            _SpriteBatch = new SpriteBatch(Application.Instance.GraphicsDevice);
+            _WhiteTexture = new Texture2D(Application.Instance.GraphicsDevice, 1, 1);
             uint[] whiteTexData = new uint[] { 0xffffffff };
             _WhiteTexture.SetData(whiteTexData);
+        }
+
+        public static void Shutdown() 
+        {
+            _SpriteBatch.Dispose();
         }
 
         public static void Begin() => _SpriteBatch.Begin();
@@ -30,9 +26,6 @@ namespace MathTricks
         public static void AddText(Vector2 position, string text, SpriteFont font, Color color)
             => _SpriteBatch.DrawString(font, text, position, color);
 
-        public static GraphicsDeviceManager Grapgics { get => _Graphics; }
-
-        private static GraphicsDeviceManager _Graphics;
         private static SpriteBatch _SpriteBatch;
         private static Texture2D _WhiteTexture;
     }

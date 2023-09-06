@@ -7,7 +7,7 @@ namespace MathTricks
         [STAThread]
         static void Main()
         {
-            using (var game = new MTGame())
+            using (var game = new Application())
                 game.Run();
         }
     }

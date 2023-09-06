@@ -10,14 +10,14 @@ namespace MathTricks
     {
         public UIComponent(Rectangle transform, UIManager manager) 
         {
-            _pTransform = transform;
+            _Transform = transform;
             manager.AddComponent(this);
         }
 
         public abstract void Draw();
         public abstract void Update();
 
-        public virtual Rectangle Transform { get => _pTransform; set => _pTransform = value; }
-        protected Rectangle _pTransform;
+        public virtual Rectangle Transform { get => _Transform; set => _Transform = value; }
+        protected Rectangle _Transform;
     }
 }

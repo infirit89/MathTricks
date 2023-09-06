@@ -8,10 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MathTricks
 {
-    enum GameForamt 
-    {
-    }
-
     class GameScreen : Screen
     {
         struct SquareIndex 
@@ -23,8 +19,6 @@ namespace MathTricks
         {
             public int Lower, Upper;
         }
-
-        public delegate void OnGameLost(string winningPlayer);
 
         public GameScreen(Point windowSize) 
         {
@@ -43,8 +37,11 @@ namespace MathTricks
         {
             _Field = new Square[Globals.FieldHeight, Globals.FieldWidth];
 
-            _FieldOffset = new Vector2(_WindowSize.X * 0.5f - (((_SquareSize + 2) * _Field.GetLength(1)) * 0.5f),
-                                       _WindowSize.Y * 0.5f - (((_SquareSize + 2) * _Field.GetLength(0)) * 0.5f));
+            _FieldOffset = new Vector2(
+                                        _WindowSize.X * 0.5f -
+                                            ((_SquareSize + 2) * _Field.GetLength(1) * 0.5f),
+                                       _WindowSize.Y * 0.5f -
+                                            ((_SquareSize + 2) * _Field.GetLength(0) * 0.5f));
 
             List<string> actions = new List<string> { "", "-", "*", "/" };
 
@@ -55,9 +52,12 @@ namespace MathTricks
                     Vector2 squarePos = new Vector2((x * (_SquareSize + 2)) + _FieldOffset.X,
                                                     (y * (_SquareSize + 2)) + _FieldOffset.Y);
 
-                    string squareValue = "";
+                    string squareValue;
 
-                    if (x == 0 && y == 0 || x == Globals.FieldWidth - 1 && y == Globals.FieldHeight - 1)
+                    if (x == 0 &&
+                        y == 0 ||
+                        x == Globals.FieldWidth - 1 &&
+                        y == Globals.FieldHeight - 1)
                     {
                         squareValue = "0";
                     }
@@ -71,7 +71,12 @@ namespace MathTricks
                         squareValue = $"{action} {number}";
                     }
                     _Field[y, x] = new Square(squarePos, _SquareSize);
-                    _Field[y, x].Text = new Text(squareValue, _ArialFont, _Field[y, x].Transform, _GameScreenUIManager);
+
+                    _Field[y, x].Text = new Text(
+                                                squareValue,
+                                                _ArialFont,
+                                                _Field[y, x].Transform,
+                                                _GameScreenUIManager);
                 }
             }
         }
@@ -134,16 +139,32 @@ namespace MathTricks
             return range;
         }
 
+        public override void OnLoad()
+        {
+            BeginGame();
+            base.OnLoad();
+        }
+
         public void BeginGame() 
         {
             _GameScreenUIManager.ClearComponents();
             GenerateBoard();
 
-            _Player1 = new Player(GetCeneteredPlayerPosition(_PlayerSize, _Field[0, 0].Transform.Location, _SquareSize),
-                                  _PlayerSize, Color.Blue);
+            _Player1 = new Player(
+                                GetCeneteredPlayerPosition(
+                                            _PlayerSize, 
+                                            _Field[0, 0].Transform.Location, 
+                                            _SquareSize),
+                                _PlayerSize, Color.Blue);
 
-            _Player2 = new Player(GetCeneteredPlayerPosition(_PlayerSize, _Field[Globals.FieldHeight - 1, Globals.FieldWidth - 1].Transform.Location, _SquareSize),
-                                  _PlayerSize, Color.Yellow);
+            _Player2 = new Player(
+                                GetCeneteredPlayerPosition(
+                                            _PlayerSize,
+                                            _Field[
+                                                Globals.FieldHeight - 1,
+                                                Globals.FieldWidth - 1].Transform.Location,
+                                            _SquareSize),
+                                _PlayerSize, Color.Yellow);
 
             _Field[0, 0].PlayerIndex = 0;
             _Field[Globals.FieldHeight - 1, Globals.FieldWidth - 1].PlayerIndex = 1;
@@ -151,15 +172,39 @@ namespace MathTricks
             _PlayerTurnCounter = 0;
 
             const int scoreTextOffset = 5;
-            _Player1ScoreText = new Text("Player 1: 0", _ArialFont, Rectangle.Empty, _GameScreenUIManager, false);
-            _Player1ScoreText.Color = Color.White;
-            _Player1ScoreText.Transform = new Rectangle(new Point(scoreTextOffset, scoreTextOffset), _Player1ScoreText.Transform.Size);
+            _Player1ScoreText = new Text(
+                                        "Player 1: 0",
+                                        _ArialFont,
+                                        Rectangle.Empty,
+                                        _GameScreenUIManager,
+                                        false)
+            {
+                Color = Color.White
+            };
+            _Player1ScoreText.Transform = new Rectangle(
+                                                    new Point(
+                                                            scoreTextOffset, 
+                                                            scoreTextOffset),
+                                                    _Player1ScoreText.Transform.Size);
 
             Vector2 textSize = _ArialFont.MeasureString(_Player1ScoreText.Value);
-            _Player2ScoreText = new Text("Player 2: 0", _ArialFont, Rectangle.Empty, _GameScreenUIManager, false);
-            _Player2ScoreText.Color = Color.White;
-            _Player2ScoreText.Transform = new Rectangle(new Point(scoreTextOffset, _Player1ScoreText.Transform.Y + (scoreTextOffset * 3) + (int)textSize.Y), 
-                                                        _Player2ScoreText.Transform.Size);
+            _Player2ScoreText = new Text(
+                                        "Player 2: 0",
+                                        _ArialFont,
+                                        Rectangle.Empty,
+                                        _GameScreenUIManager,
+                                        false)
+            {
+                Color = Color.White
+            };
+
+            _Player2ScoreText.Transform = new Rectangle(
+                                                    new Point(
+                                                        scoreTextOffset, 
+                                                        _Player1ScoreText.Transform.Y 
+                                                            + (scoreTextOffset * 3) 
+                                                            + (int)textSize.Y), 
+                                                    _Player2ScoreText.Transform.Size);
         }
 
         private Point GetCeneteredPlayerPosition(int playerSize, Point squarePosition, int squareSize) 
@@ -171,42 +216,43 @@ namespace MathTricks
         public override void LoadContent(ContentManager manager) 
         {
             _ArialFont = manager.Load<SpriteFont>("Arial");
-            _pBackground = manager.Load<Texture2D>("bg");
-            _pBackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
+            Background = manager.Load<Texture2D>("bg");
+            BackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }
 
         public override void Update() 
         {
-            if (Globals.IsSinglePlayer)
+            if (!ValidMoveExists())
             {
-                if (MTMouse.IsButtonPressed(MouseButtons.Left))
+                Globals.WinningPlayerName = 
+                            _PlayerTurnCounter % 2 == 0 ? "Player 2" : "Player 1";
+                ScreenManager.CurrentScreen = ScreenState.EndScreen;
+            }
+
+            if (Globals.IsSinglePlayer && _PlayerTurnCounter % 2 == 1)
+            {
+                foreach (var square in _Field.Cast<Square>().ToArray())
                 {
-                    Square square = _Field.Cast<Square>().ToArray()
-                        .FirstOrDefault(x => x.Transform.Intersects(MTMouse.GetMouseRect()));
-                    PlacePiece(square);
-                }
-                else if (_PlayerTurnCounter % 2 == 1)
-                {
-                    foreach (var square in _Field.Cast<Square>().ToArray())
-                    {
-                        PlacePiece(square);
-                        if (_PlayerTurnCounter % 2 == 0)
-                        {
-                            break;
-                        }
-                    }
+                    if(PlacePiece(square)) 
+                        break;
                 }
             }
-            else if (MTMouse.IsButtonPressed(MouseButtons.Left))
+            else if (Input.IsButtonPressed(MouseButtons.Left))
             {
-                Square square = _Field.Cast<Square>().ToArray().FirstOrDefault(x => x.Transform.Intersects(MTMouse.GetMouseRect()));                    
+                Square square = _Field.Cast<Square>()
+                                        .ToArray()
+                                        .FirstOrDefault(
+                                                    x => x
+                                                        .Transform
+                                                        .Intersects(
+                                                            Input.GetMouseRect()));
                 PlacePiece(square);
             }
         }
         
         public override void Draw()
         {
-            GraphicsManager.AddQuad(_pBackgroundTransform, Color.White, _pBackground);
+            Renderer.AddQuad(BackgroundTransform, Color.White, Background);
 
             for (int y = 0; y < _Field.GetLength(0); y++) 
             {
@@ -222,7 +268,7 @@ namespace MathTricks
                     else if (y == Globals.FieldHeight - 1 && x == Globals.FieldWidth - 1)
                         currentSquareColor = _PlayerColor[1];
 
-                    GraphicsManager.AddQuad(_Field[y, x].Transform, currentSquareColor);
+                    Renderer.AddQuad(_Field[y, x].Transform, currentSquareColor);
                 } 
             }
 
@@ -253,47 +299,55 @@ namespace MathTricks
             return 0;
         }
 
-        private void PlacePiece(Square square)
+        private bool PlacePiece(Square square)
         {
             if (square != null)
             {
-                SquareIndex ind = GetSquareIndexInMatrix(square);
-
-                if (IsMoveValid(ind))
+                if(IsMoveValid(square)) 
                 {
-                    Point newPlayerPosition = GetCeneteredPlayerPosition(_PlayerSize, square.Transform.Location, _SquareSize);
+                    SquareIndex ind = GetSquareIndexInMatrix(square);
+
+                    Point newPlayerPosition = GetCeneteredPlayerPosition(
+                                                                    _PlayerSize,
+                                                                    square.Transform.Location,
+                                                                    _SquareSize);
                     if (_PlayerTurnCounter % 2 == 0)
                     {
-                        _Player1.Transform = new Rectangle(newPlayerPosition, _Player1.Transform.Size);
+                        _Player1.Transform = new Rectangle(
+                                                        newPlayerPosition,
+                                                        _Player1.Transform.Size);
+
                         _Player1.Score = CalculatePlayerScore(_Player1.Score, square.Text.Value);
                         _Player1ScoreText.Value = $"Player 1: {_Player1.Score}";
                     }
                     else
                     {
-                        _Player2.Transform = new Rectangle(newPlayerPosition, _Player2.Transform.Size);
+                        _Player2.Transform = new Rectangle(
+                                                        newPlayerPosition,
+                                                        _Player2.Transform.Size);
                         _Player2.Score = CalculatePlayerScore(_Player2.Score, square.Text.Value);
                         _Player2ScoreText.Value = $"Player 2: {_Player2.Score}";
                     }
                     _Field[ind.Y, ind.X].PlayerIndex = _PlayerTurnCounter % 2;
-
                     _PlayerTurnCounter++;
-                    if (!ValidMoveExists())
-                    {
-                        OnGameLostEvent(_PlayerTurnCounter % 2 == 0 ? "Player 2" : "Player 1");
-                        ApplicationManager.CurrentState = ApplicationState.EndScreen;
-                    }
-
+                    return true;
                 }
+
             }
+
+            return false;
         }
 
-        private bool IsMoveValid(SquareIndex index)
+        private bool IsMoveValid(Square square)
         {
-            Player currentPlayer = _PlayerTurnCounter % 2 == 0 ? _Player1 : _Player2;
-            Square playerSquare = _Field.Cast<Square>().ToArray().FirstOrDefault(square => square.Transform.Intersects(currentPlayer.Transform));
+            SquareIndex index = GetSquareIndexInMatrix(square);
+            
+            Square playerSquare = GetCurrentPlayerSquare();
             SquareIndex playerSquareIndex = GetSquareIndexInMatrix(playerSquare);
 
-            int xDirection = Math.Abs(playerSquareIndex.X - index.X), yDirection = Math.Abs(playerSquareIndex.Y - index.Y);
+            int xDirection = Math.Abs(playerSquareIndex.X - index.X);
+            int yDirection = Math.Abs(playerSquareIndex.Y - index.Y);
+
             if (xDirection > 1 || yDirection > 1)
                 return false;
 
@@ -303,32 +357,56 @@ namespace MathTricks
             return true;
         }
 
-        private bool ValidMoveExists() 
+        private Square GetPlayerSquare(Player player)
+        {
+            return _Field
+                        .Cast<Square>()
+                        .ToArray()
+                        .FirstOrDefault(
+                            square => square
+                                        .Transform
+                                        .Intersects(player.Transform));
+        }
+
+        private Square GetCurrentPlayerSquare() 
         {
             Player currentPlayer = _PlayerTurnCounter % 2 == 0 ? _Player1 : _Player2;
-            Square playerSquare = _Field.Cast<Square>().ToArray().FirstOrDefault(square => square.Transform.Intersects(currentPlayer.Transform));
+            return GetPlayerSquare(currentPlayer);
+        }
+
+        private bool ValidMoveExists() 
+        {
+            Square playerSquare = GetCurrentPlayerSquare();
             SquareIndex playerSquareIndex = GetSquareIndexInMatrix(playerSquare);
 
             bool validMoveExists = false;
 
-            if (playerSquareIndex.X + 1 < Globals.FieldWidth && _Field[playerSquareIndex.Y, playerSquareIndex.X + 1].PlayerIndex == -1)
+            if (playerSquareIndex.X + 1 < Globals.FieldWidth &&
+                _Field[playerSquareIndex.Y, playerSquareIndex.X + 1].PlayerIndex == -1)
                 validMoveExists = true;
-            else if (playerSquareIndex.X - 1 >= 0 && _Field[playerSquareIndex.Y, playerSquareIndex.X - 1].PlayerIndex == -1)
+            else if (playerSquareIndex.X - 1 >= 0 &&
+                    _Field[playerSquareIndex.Y, playerSquareIndex.X - 1].PlayerIndex == -1)
                 validMoveExists = true;
-            else if (playerSquareIndex.Y + 1 > Globals.FieldHeight && _Field[playerSquareIndex.Y + 1, playerSquareIndex.X].PlayerIndex == -1)
+            else if (playerSquareIndex.Y + 1 > Globals.FieldHeight &&
+                    _Field[playerSquareIndex.Y + 1, playerSquareIndex.X].PlayerIndex == -1)
                 validMoveExists = true;
-            else if (playerSquareIndex.Y - 1 >= 0 && _Field[playerSquareIndex.Y - 1, playerSquareIndex.X].PlayerIndex == -1)
+            else if (playerSquareIndex.Y - 1 >= 0 &&
+                    _Field[playerSquareIndex.Y - 1, playerSquareIndex.X].PlayerIndex == -1)
                 validMoveExists = true;
-            else if (playerSquareIndex.X + 1 < Globals.FieldWidth && playerSquareIndex.Y + 1 < Globals.FieldHeight &&
+            else if (playerSquareIndex.X + 1 < Globals.FieldWidth &&
+                    playerSquareIndex.Y + 1 < Globals.FieldHeight &&
                     _Field[playerSquareIndex.Y + 1, playerSquareIndex.X + 1].PlayerIndex == -1)
                 validMoveExists = true;
-            else if (playerSquareIndex.X - 1 >= 0 && playerSquareIndex.Y + 1 < Globals.FieldHeight &&
+            else if (playerSquareIndex.X - 1 >= 0 &&
+                    playerSquareIndex.Y + 1 < Globals.FieldHeight &&
                     _Field[playerSquareIndex.Y + 1, playerSquareIndex.X - 1].PlayerIndex == -1)
                 validMoveExists = true;
-            else if (playerSquareIndex.X + 1 < Globals.FieldWidth && playerSquareIndex.Y - 1 >= 0 &&
+            else if (playerSquareIndex.X + 1 < Globals.FieldWidth &&
+                    playerSquareIndex.Y - 1 >= 0 &&
                     _Field[playerSquareIndex.Y - 1, playerSquareIndex.X + 1].PlayerIndex == -1)
                 validMoveExists = true;
-            else if (playerSquareIndex.X - 1 >= 0 && playerSquareIndex.Y - 1 >= 0 &&
+            else if (playerSquareIndex.X - 1 >= 0 &&
+                    playerSquareIndex.Y - 1 >= 0 &&
                     _Field[playerSquareIndex.Y - 1, playerSquareIndex.X - 1].PlayerIndex == -1)
                 validMoveExists = true;
 
@@ -339,10 +417,12 @@ namespace MathTricks
         {
             // convert from square location to the square index in the field matrix
             Vector2 squarePosition = square.Transform.Location.ToVector2();
-            return new SquareIndex() { X = (int)((squarePosition.X - _FieldOffset.X) / (_SquareSize + 2)), Y = (int)((squarePosition.Y - _FieldOffset.Y) / (_SquareSize + 2)) };
+            return new SquareIndex() 
+            { 
+                X = (int)((squarePosition.X - _FieldOffset.X) / (_SquareSize + 2)), 
+                Y = (int)((squarePosition.Y - _FieldOffset.Y) / (_SquareSize + 2)) 
+            };
         }
-
-        public OnGameLost OnGameLostEvent { private get; set; } = null;
 
         private Square[,] _Field;
         private const int _SquareSize = 50;

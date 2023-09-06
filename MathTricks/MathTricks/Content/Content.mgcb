@@ -44,6 +44,9 @@
 /processorParam:TextureFormat=Color
 /build:body.png
 
+#begin Help.txt
+/copy:Help.txt
+
 #begin niggaButton.png
 /importer:TextureImporter
 /processor:TextureProcessor
