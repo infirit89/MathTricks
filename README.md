@@ -7,7 +7,7 @@
 ## How to install through git and github
 ### On windows open command prompt and use cd to navigate to the directory where you want MathTricks(keep in mind the game is going to make its own folder called MathTricks) and run: 
 ```
-git clone https://github.com/OKAY808/Game2.git
+git clone https://github.com/infirit89/MathTricks
 ```
 
 ## How to run
