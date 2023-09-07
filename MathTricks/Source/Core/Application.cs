@@ -49,6 +49,8 @@ namespace MathTricks
 
             ScreenManager.CurrentScreen = ScreenState.MainMenu;
 
+            _ClearColor = new Color(0x282828);
+
             base.Initialize();
         }
 
@@ -74,7 +76,7 @@ namespace MathTricks
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(_ClearColor);
 
             Renderer.Begin();
 
@@ -90,9 +92,12 @@ namespace MathTricks
             _GraphicsDeviceManager.PreferredBackBufferWidth = GraphicsDevice.Viewport.Width;
             _GraphicsDeviceManager.PreferredBackBufferHeight = GraphicsDevice.Viewport.Height;
             _GraphicsDeviceManager.ApplyChanges();
+
+            ScreenManager.OnResize(GraphicsDevice.Viewport);
         }
 
         private static Application s_Instance;
         private GraphicsDeviceManager _GraphicsDeviceManager;
+        private Color _ClearColor;
     }
 }

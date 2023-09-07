@@ -10,7 +10,6 @@ namespace MathTricks
     {
         private Point _WindowSize;
         private Rectangle _HelpButtonRectangle;
-        private Rectangle _EscapeFromHelpScreenButtonRectangle;
         
         public override void LoadContent(ContentManager manager) 
         {
@@ -21,21 +20,24 @@ namespace MathTricks
             const int escapeButtonWidth = 50;
             const int escapeButtonHeight = 20;
 
-            _EscapeFromHelpScreenButtonRectangle = new Rectangle(
-                                                            _WindowSize.X - 
-                                                                (escapeButtonWidth + 
-                                                                offsetXAndEscapeButtonY) , 
-                                                            offsetXAndEscapeButtonY, 
-                                                            escapeButtonWidth, 
-                                                            escapeButtonHeight);
+            Transform2D returnToMainMenuButtonTransform = new Transform2D() 
+            {
+                Position = new Vector2(
+                                    _WindowSize.X - 
+                                        (escapeButtonWidth + 
+                                        offsetXAndEscapeButtonY), 
+                                    offsetXAndEscapeButtonY),
+
+                Size = new Vector2(escapeButtonWidth, escapeButtonHeight)
+            };
 
             Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
             Button _EscapeFromHelpScreenButton = new Button(
-                                                        _EscapeFromHelpScreenButtonRectangle,
+                                                        returnToMainMenuButtonTransform,
                                                         "Back",
                                                         _Font,
-                                                        _HelpScreenManager,
                                                         _ButtonTexture);
+
             _EscapeFromHelpScreenButton.OnButtonPressedEvent = () => 
             {
                 ScreenManager.CurrentScreen = ScreenState.MainMenu;
@@ -51,9 +53,8 @@ namespace MathTricks
                                         offsetXAndEscapeButtonY,
                                         offsetY,
                                         _WindowSize.X,
-                                        _WindowSize.Y),
-                            _HelpScreenManager);
-            text.Transform = new Rectangle(0, offsetY, text.Transform.Width, text.Transform.Height);
+                                        _WindowSize.Y));
+            text.Transform.Position = new Vector2(0, offsetY);
 
             text.Color = Color.White;
         }

@@ -12,11 +12,12 @@ namespace MathTricks
         public void AddComponent(UIComponent component) => _UIComponents.Add(component);
         public void ClearComponents() => _UIComponents.Clear();
 
-        public void Update() 
+        public void Update()
         {
             foreach (var component in _UIComponents)
                 component.Update();
         }
+
 
         public void Draw() 
         {
@@ -25,5 +26,6 @@ namespace MathTricks
         }
 
         private List<UIComponent> _UIComponents;
+        public static float GlobalScale = 1.0f;
     }
 }

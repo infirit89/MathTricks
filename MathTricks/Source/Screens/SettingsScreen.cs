@@ -35,44 +35,58 @@ namespace MathTricks
         private void SetupSettingUI(ContentManager manager)
         {
             Point center = new Point(_WindowSize.X / 2, _WindowSize.Y / 2);
-            Point buttonSize = new Point(_ButtonWidth, _ButtonHeight);
+            Vector2 buttonSize = new Vector2(_ButtonWidth, _ButtonHeight);
 
-            Rectangle confirmButtonTransform = new Rectangle(new Point(center.X - buttonSize.X / 2,
-                                                            _WindowSize.Y - 80), buttonSize);
+            Transform2D confirmButtonTransform = new Transform2D() 
+            {
+                Position = new Vector2(center.X - buttonSize.X / 2, _WindowSize.Y - 80),
+                Size = buttonSize
+
+            };
+
             Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
-            Button confirmButton = new Button(confirmButtonTransform, "Confirm",
-                                                _ArialFont, _SettingsManager, _ButtonTexture);
+            Button confirmButton = new Button(
+                                            confirmButtonTransform,
+                                            "Confirm",
+                                            _ArialFont,
+                                            _ButtonTexture);
 
-            Point modifierButtonSize = new Point(40, 40);
+            Vector2 modifierButtonSize = new Vector2(40, 40);
 
-            Rectangle modifierUITransform = new Rectangle(
-                                                    new Point(
-                                                            (center.X - buttonSize.X / 2) -
-                                                            _ModifierButtonOffset,
-                                                    center.Y - buttonSize.Y / 2), 
-                                                    modifierButtonSize);
+            Transform2D modifierUITransform = new Transform2D() 
+            {
+                Position = new Vector2(
+                                    (center.X - buttonSize.X / 2) -
+                                        _ModifierButtonOffset,
+                                    center.Y - buttonSize.Y / 2),
+                Size = modifierButtonSize
+            };
 
             Text widthValueText = new Text(
                                         Globals.FieldWidth.ToString(),
                                         _ArialFont,
-                                        _WindowSize, _SettingsManager);
+                                        _WindowSize);
 
             Text heightValueText = new Text(
                                         Globals.FieldHeight.ToString(),
                                         _ArialFont,
-                                        _WindowSize,
-                                        _SettingsManager);
+                                        _WindowSize);
 
-            Text widthText = new Text("Width:", _ArialFont, _WindowSize, _SettingsManager);
+            Text widthText = new Text(
+                                    "Width:",
+                                    _ArialFont,
+                                    _WindowSize);
             widthText.Color = Color.White;
-            Text height = new Text("Height:", _ArialFont, _WindowSize, _SettingsManager);
+            Text height = new Text(
+                                "Height:",
+                                _ArialFont,
+                                _WindowSize);
             height.Color = Color.White;
 
             Button minusWidthButton = new Button(
                                                 modifierUITransform,
                                                 "-",
                                                 _ArialFont,
-                                                _SettingsManager,
                                                 _ButtonTexture);
             minusWidthButton.OnButtonPressedEvent = () =>
             {
@@ -81,57 +95,54 @@ namespace MathTricks
                 widthValueText.Value = Globals.FieldWidth.ToString();
             };
 
-            widthText.Transform = new Rectangle(
-                                            new Point(
-                                                    widthText.Transform.X - 
-                                                    minusWidthButton.Transform.Width * 3,
-                                                    widthText.Transform.Y - _ModifierButtonOffset),
-                                            widthText.Transform.Size);
+            widthText.Transform.Position = new Vector2(
+                                                    widthText.Transform.Position.X - 
+                                                        minusWidthButton.Transform.Size.X * 3,
+                                                    widthText.Transform.Position.Y 
+                                                        - _ModifierButtonOffset);
 
 
             widthValueText.Color = Color.White;
 
-            modifierUITransform.Y += modifierButtonSize.Y + _ModifierButtonOffset;
+            modifierUITransform.Position += 
+                                        new Vector2(0, modifierButtonSize.Y + _ModifierButtonOffset);
 
             Button minusHeightButton = new Button(
                                                 modifierUITransform,
                                                 "-",
                                                 _ArialFont,
-                                                _SettingsManager,
                                                 _ButtonTexture);
 
-            height.Transform = new Rectangle(
-                                        new Point(
-                                                height.Transform.X -
-                                                minusHeightButton.Transform.Width * 3,
-                                                height.Transform.Y +
-                                                height.Transform.Height +
-                                                _ModifierButtonOffset * 3),
-                                        height.Transform.Size);
+            height.Transform.Position = new Vector2(
+                                                height.Transform.Position.X -
+                                                    minusHeightButton.Transform.Size.X * 3,
+                                                height.Transform.Position.Y +
+                                                    height.Transform.Size.Y +
+                                                    _ModifierButtonOffset * 3);
 
             minusHeightButton.OnButtonPressedEvent = () =>
             {
                 Globals.FieldHeight--;
                 Globals.FieldHeight = Math.Min(Globals.FieldHeight, _MaxFieldSize.Y);
                 heightValueText.Value = Globals.FieldHeight.ToString();
-                heightValueText.Transform = new Rectangle(
-                                                        heightValueText.Transform.X,
-                                                        heightValueText.Transform.Y + 
-                                                        heightValueText.Transform.Height + 
-                                                        _ModifierButtonOffset * 3,
-                                                        heightValueText.Transform.Width,
-                                                        heightValueText.Transform.Height);
+                heightValueText.Transform.Position = new Vector2(
+                                                        heightValueText.Transform.Position.X,
+                                                        heightValueText.Transform.Position.Y + 
+                                                            heightValueText.Transform.Size.X + 
+                                                            _ModifierButtonOffset * 3);
 
             };
 
-            modifierUITransform.Y -= modifierButtonSize.Y + _ModifierButtonOffset;
+            modifierUITransform.Position -=
+                                    new Vector2(0, modifierButtonSize.Y + _ModifierButtonOffset);
 
-            modifierUITransform.X += modifierButtonSize.X * 3 + _ModifierButtonOffset;
+            modifierUITransform.Position +=
+                                    new Vector2(modifierButtonSize.X * 3 + _ModifierButtonOffset, 0);
+
             Button plusWidthButton = new Button(
                                             modifierUITransform,
                                             "+",
                                             _ArialFont,
-                                            _SettingsManager,
                                             _ButtonTexture);
             plusWidthButton.OnButtonPressedEvent = () =>
             {
@@ -141,24 +152,22 @@ namespace MathTricks
                 widthValueText.Value = Globals.FieldWidth.ToString();
             };
 
-            heightValueText.Transform = new Rectangle(
-                                                    heightValueText.Transform.X,
-                                                    heightValueText.Transform.Y +
-                                                    heightValueText.Transform.Height +
-                                                    _ModifierButtonOffset * 3,
-                                                    heightValueText.Transform.Width,
-                                                    heightValueText.Transform.Height);
+            heightValueText.Transform.Position = new Vector2(
+                                                    heightValueText.Transform.Position.X,
+                                                    heightValueText.Transform.Position.Y +
+                                                        heightValueText.Transform.Size.Y +
+                                                        _ModifierButtonOffset * 3);
 
             widthValueText.Color = Color.White;
             heightValueText.Color = Color.White;
 
-            modifierUITransform.Y += modifierButtonSize.Y + _ModifierButtonOffset;
+            modifierUITransform.Position +=
+                                    new Vector2(0, modifierButtonSize.Y + _ModifierButtonOffset);
 
             Button plusHeightButton = new Button(
                                                 modifierUITransform,
                                                 "+",
                                                 _ArialFont,
-                                                _SettingsManager,
                                                 _ButtonTexture);
             plusHeightButton.OnButtonPressedEvent = () =>
             {
@@ -166,13 +175,11 @@ namespace MathTricks
                 Globals.FieldHeight = Math.Max(Globals.FieldHeight, _MinFieldSize.X);
 
                 heightValueText.Value = Globals.FieldHeight.ToString();
-                heightValueText.Transform = new Rectangle(
-                                                        heightValueText.Transform.X,
-                                                        heightValueText.Transform.Y +
-                                                        heightValueText.Transform.Height +
-                                                        _ModifierButtonOffset * 3,
-                                                        heightValueText.Transform.Width,
-                                                        heightValueText.Transform.Height);
+                heightValueText.Transform.Position = new Vector2(
+                                                        heightValueText.Transform.Position.X,
+                                                        heightValueText.Transform.Position.Y +
+                                                            heightValueText.Transform.Size.Y +
+                                                            _ModifierButtonOffset * 3);
 
             };
 

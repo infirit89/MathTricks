@@ -16,8 +16,10 @@ namespace MathTricks
         {
             _Text.Value = $"{Globals.WinningPlayerName} has won!";
 
-            _Text.Transform = new Rectangle(_Text.Transform.X, _Text.Transform.Y - 50,
-                                            _Text.Transform.Width, _Text.Transform.Height);
+            _Text.Transform.Position = new Vector2(
+                                                _Text.Transform.Position.X,
+                                                _Text.Transform.Position.X - 50);
+
             base.OnLoad();
         }
 
@@ -25,22 +27,24 @@ namespace MathTricks
         {
             Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
             _Font = manager.Load<SpriteFont>("Salvar");
-            _Text = new Text("Player 1 has won!", _Font, _WindowSize, _Manager)
+            _Text = new Text("Player 1 has won!", _Font, _WindowSize)
             {
                 Color = Color.White
             };
 
-            _ButtonTransform = new Rectangle(
-                                            _WindowSize.X / 2 - _ButtonWidth / 2,
-                                            _WindowSize.Y / 2,
+            Transform2D buttonTransform = new Transform2D();
+            buttonTransform.Position = new Vector2(
+                                                _WindowSize.X / 2 - _ButtonWidth / 2,
+                                                _WindowSize.Y / 2);
+
+            buttonTransform.Size = new Vector2(
                                             _ButtonWidth,
                                             _ButtonHeight);
 
             Button MainMenu = new Button(
-                                    _ButtonTransform,
+                                    buttonTransform,
                                     "Main Menu",
                                     _Font,
-                                    _Manager,
                                     _ButtonTexture)
             {
                 OnButtonPressedEvent =
@@ -66,7 +70,6 @@ namespace MathTricks
         private SpriteFont _Font;
         private UIManager _Manager;
         private Point _WindowSize;
-        private Rectangle _ButtonTransform;
         private const int _ButtonWidth = 150, _ButtonHeight = 50;
     }
 }

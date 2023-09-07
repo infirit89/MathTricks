@@ -10,9 +10,8 @@ namespace MathTricks
                 string text,
                 SpriteFont font,
                 Rectangle bounds,
-                UIManager manager,
                 bool centerTransform = true)
-            : base(new Rectangle(0, 0, 0, 0), manager)
+            : base(new Transform2D())
         {
             _Text = text;
             _Font = font;
@@ -24,22 +23,23 @@ namespace MathTricks
             Color = Color.Black;
         }
 
-        public Text(string text, SpriteFont font, Point bounds, UIManager manager)
-            : this(text, font, new Rectangle(new Point(0, 0), bounds), manager) { }
+        public Text(string text, SpriteFont font, Point bounds)
+            : this(text, font, new Rectangle(new Point(0, 0), bounds)) { }
 
         public override void Update()
         { }
 
         public override void Draw()
         {
-            Renderer.AddText(Transform.Location.ToVector2(), _Text, _Font, Color);
+            Renderer.AddText(Transform.Position, _Text, _Font, Color);
         }
         public void CenterTransform(Rectangle bounds) 
         {
             Vector2 textSize = _Font.MeasureString(_Text);
             Vector2 textPos = new Vector2(((bounds.Width / 2) - (textSize.X / 2)) + bounds.X, 
                                           ((bounds.Height / 2) - (textSize.Y / 2)) + bounds.Y);
-            Transform = new Rectangle(textPos.ToPoint(), textSize.ToPoint());
+            Transform.Position = textPos;
+            Transform.Size = textSize;
         }
 
         public void CenterTransform(Point size) 

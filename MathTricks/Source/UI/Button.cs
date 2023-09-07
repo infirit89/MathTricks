@@ -8,14 +8,13 @@ namespace MathTricks
         public delegate void OnButtonPressed();
 
         public Button(
-                    Rectangle buttonTransform,
+                    Transform2D transform,
                     string text,
                     SpriteFont font,
-                    UIManager manager,
                     Texture2D buttonTexture = null)
-            : base(buttonTransform, manager)
+            : base(transform)
         {
-            _Text = new Text(text, font, Transform, manager);  
+            // _Text = new Text(text, font, Transform);  
             ButtonColor = Color.White;
             HoveredButtonColor = Color.Gray;
             _Hovered = false;
@@ -24,7 +23,7 @@ namespace MathTricks
 
         public override void Update() 
         {
-            _Hovered = Input.GetMouseRect().Intersects(Transform);
+            _Hovered = Input.GetMouseRect().Intersects(BoundingBox);
 
             if (_Hovered && Input.IsButtonPressed(MouseButtons.Left) && OnButtonPressedEvent != null)
                 OnButtonPressedEvent();
@@ -36,20 +35,10 @@ namespace MathTricks
             Renderer.AddQuad(Transform, _Hovered ? HoveredButtonColor : ButtonColor, _Texture);
         }
 
-        public override Rectangle Transform 
-        {
-            get => _Transform;
-
-            set 
-            {
-                _Transform = value;
-                _Text.CenterTransform(_Transform);
-            } 
-        }
         public OnButtonPressed OnButtonPressedEvent { private get; set; } = null;
         public Color ButtonColor, HoveredButtonColor;
         private Texture2D _Texture;
-        private Text _Text;
+        // private Text _Text;
         private bool _Hovered;
     }
 }

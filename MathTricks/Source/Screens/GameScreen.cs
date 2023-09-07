@@ -75,8 +75,7 @@ namespace MathTricks
                     _Field[y, x].Text = new Text(
                                                 squareValue,
                                                 _ArialFont,
-                                                _Field[y, x].Transform,
-                                                _GameScreenUIManager);
+                                                _Field[y, x].Transform);
                 }
             }
         }
@@ -176,35 +175,28 @@ namespace MathTricks
                                         "Player 1: 0",
                                         _ArialFont,
                                         Rectangle.Empty,
-                                        _GameScreenUIManager,
                                         false)
             {
                 Color = Color.White
             };
-            _Player1ScoreText.Transform = new Rectangle(
-                                                    new Point(
-                                                            scoreTextOffset, 
-                                                            scoreTextOffset),
-                                                    _Player1ScoreText.Transform.Size);
+
+            _Player1ScoreText.Transform.Position = new Vector2(scoreTextOffset, scoreTextOffset);
 
             Vector2 textSize = _ArialFont.MeasureString(_Player1ScoreText.Value);
             _Player2ScoreText = new Text(
                                         "Player 2: 0",
                                         _ArialFont,
                                         Rectangle.Empty,
-                                        _GameScreenUIManager,
                                         false)
             {
                 Color = Color.White
             };
 
-            _Player2ScoreText.Transform = new Rectangle(
-                                                    new Point(
+            _Player2ScoreText.Transform.Position = new Vector2(
                                                         scoreTextOffset, 
-                                                        _Player1ScoreText.Transform.Y 
-                                                            + (scoreTextOffset * 3) 
-                                                            + (int)textSize.Y), 
-                                                    _Player2ScoreText.Transform.Size);
+                                                        _Player1ScoreText.Transform.Position.Y +
+                                                            (scoreTextOffset * 3) +
+                                                            (int)textSize.Y);
         }
 
         private Point GetCeneteredPlayerPosition(int playerSize, Point squarePosition, int squareSize) 

@@ -14,6 +14,8 @@ namespace MathTricks
         public virtual void OnLoad() { }
         public virtual void OnUnload() { }
 
+        public virtual void OnResize(Viewport viewport) { }
+
         protected Texture2D Background;
         protected Rectangle BackgroundTransform;
     }
@@ -44,6 +46,12 @@ namespace MathTricks
         {
             foreach (var item in s_Screens)
                 item.Value.LoadContent(contentManager);
+        }
+
+        public static void OnResize(Viewport viewport)
+        {
+            foreach (var item in s_Screens)
+                item.Value.OnResize(viewport);
         }
 
         public static string CurrentScreen 

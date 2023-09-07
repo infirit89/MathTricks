@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,8 +9,6 @@ namespace MathTricks
     class MainScreen : Screen
     {
         private Point _WindowSize;
-        private Rectangle _PlayButtonRectanlge;
-        private Rectangle _HelpButtonRectangle;
 
         public override void LoadContent(ContentManager manager) 
         {
@@ -18,27 +17,36 @@ namespace MathTricks
             const int buttonWidth = 200;
             const int buttonHeight = 70;
 
-            _PlayButtonRectanlge = new Rectangle(
-                                            _WindowSize.X / 2 - buttonWidth / 2,
-                                            _WindowSize.Y / 2 - buttonHeight * 2,
-                                            buttonWidth,
-                                            buttonHeight);
-            _HelpButtonRectangle = new Rectangle(
-                                            _WindowSize.X / 2 - buttonWidth / 2,
-                                            _WindowSize.Y / 2 , buttonWidth,
-                                            buttonHeight);
+            Transform2D playButtonTransform = new Transform2D() 
+            {
+                Position = new Vector2(
+                                    _WindowSize.X / 2 - buttonWidth / 2,
+                                    _WindowSize.Y / 2 - buttonHeight * 2),
+
+                Size = new Vector2(buttonWidth, buttonHeight)
+            };
+
+            Transform2D helpButtonTransform = new Transform2D() 
+            {
+                Position = new Vector2(
+                                    _WindowSize.X / 2 - buttonWidth / 2,
+                                    _WindowSize.Y / 2),
+
+                Size = new Vector2(buttonWidth, buttonHeight)
+            };
+
             Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
+            
             Button _PlayButton = new Button(
-                                        _PlayButtonRectanlge,
+                                        playButtonTransform,
                                         "Play",
                                         _Font,
-                                        _MainScreenManager,
                                         _ButtonTexture);
+                                        
             Button _HelpButton = new Button(
-                                        _HelpButtonRectangle,
+                                        helpButtonTransform,
                                         "Help",
                                         _Font,
-                                        _MainScreenManager,
                                         _ButtonTexture);
 
             _PlayButton.OnButtonPressedEvent = () => 
@@ -51,8 +59,20 @@ namespace MathTricks
                 ScreenManager.CurrentScreen = ScreenState.HelpScreen;
             };
 
-            Background = manager.Load<Texture2D>("bg");
-            BackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
+            Background = manager.Load<Texture2D>("MenuBg");
+
+            int aspectRatio = _WindowSize.X / _WindowSize.Y;
+            // BackgroundTransform = new Rectangle();
+
+            // BackgroundTransform.Size = new Point((_WindowSize.X / 2) / 
+            //                                         Background.Bounds.Size.X,
+            //                                     (_WindowSize.Y / 2) / 
+            //                                         Background.Bounds.Size.Y);
+
+            // BackgroundTransform.Location = new Point(
+            //                                     _WindowSize.X / 2 -
+            //                                         BackgroundTransform.Size.X / 2,
+            //                                     _WindowSize.Y / 2);
         }
 
         public MainScreen(Point WindowSize)
@@ -61,15 +81,29 @@ namespace MathTricks
             _MainScreenManager = new UIManager();
         }
 
-
-        public override void Update() 
+        public override void Update()
         {
             _MainScreenManager.Update();
         }
 
+        public override void OnResize(Viewport viewport)
+        {
+            // int aspectRatio = viewport.Bounds.Size.X / viewport.Bounds.Size.Y;
+
+            // BackgroundTransform.Size = new Point(Background.Bounds.Size.X / 
+            //                                         (viewport.Bounds.Size.X / 2),
+            //                                         Background.Bounds.Size.Y /
+            //                                         (viewport.Bounds.Size.Y / 2));
+
+            // BackgroundTransform.Location = new Point(
+            //                                     viewport.Bounds.Size.X / 2 -
+            //                                         BackgroundTransform.Size.X / 2,
+            //                                     viewport.Bounds.Size.Y / 2);
+        }
+
         public override void Draw()
         {
-            Renderer.AddQuad(BackgroundTransform, Color.White, Background);
+            // Renderer.AddQuad(BackgroundTransform, Color.White, Background);
             _MainScreenManager.Draw();
         }
 

@@ -8,7 +8,10 @@ namespace MathTricks
         public static void Init()
         {
             _SpriteBatch = new SpriteBatch(Application.Instance.GraphicsDevice);
-            _WhiteTexture = new Texture2D(Application.Instance.GraphicsDevice, 1, 1);
+            _WhiteTexture = new Texture2D(
+                                        Application.Instance.GraphicsDevice,
+                                        1, 1);
+
             uint[] whiteTexData = new uint[] { 0xffffffff };
             _WhiteTexture.SetData(whiteTexData);
         }
@@ -18,12 +21,44 @@ namespace MathTricks
             _SpriteBatch.Dispose();
         }
 
-        public static void Begin() => _SpriteBatch.Begin();
+        public static void Begin() 
+                => _SpriteBatch.Begin(
+                                    SpriteSortMode.Deferred,
+                                    null,
+                                    SamplerState.PointClamp);
         public static void End() => _SpriteBatch.End();
 
-        public static void AddQuad(Rectangle transform, Color color, Texture2D texture = null)
-            => _SpriteBatch.Draw(texture == null ? _WhiteTexture : texture, transform, color);
-        public static void AddText(Vector2 position, string text, SpriteFont font, Color color)
+        public static void AddQuad(
+                                Rectangle transform,
+                                Color color,
+                                Texture2D texture = null)
+            => _SpriteBatch.Draw(
+                            texture == null ? _WhiteTexture : texture,
+                            transform,
+                            color);
+
+        public static void AddQuad(
+                                Transform2D transform,
+                                Color color,
+                                Texture2D texture = null) 
+        {
+            _SpriteBatch.Draw(
+                            texture == null ? _WhiteTexture : texture,
+                            transform.Position,
+                            null,
+                            color,
+                            transform.Rotation,
+                            Vector2.Zero,
+                            transform.Size,
+                            SpriteEffects.None,
+                            0.0f);
+        }
+
+        public static void AddText(
+                                Vector2 position,
+                                string text,
+                                SpriteFont font,
+                                Color color)
             => _SpriteBatch.DrawString(font, text, position, color);
 
         private static SpriteBatch _SpriteBatch;
