@@ -6,26 +6,24 @@ namespace MathTricks
     {
         public UIManager() 
         {
-            _UIComponents = new List<UIComponent>();
+            _Canvas = new Canvas();
         }
 
-        public void AddComponent(UIComponent component) => _UIComponents.Add(component);
-        public void ClearComponents() => _UIComponents.Clear();
+        public void AddComponent(UIComponent component) => _Canvas.AddChild(component);
+        public void ClearComponents() => _Canvas.Children.Clear();
 
         public void Update()
         {
-            foreach (var component in _UIComponents)
-                component.Update();
+            _Canvas.Update();
         }
 
 
         public void Draw() 
         {
-            foreach (var component in _UIComponents)
-                component.Draw();
+            _Canvas.Draw();
         }
 
-        private List<UIComponent> _UIComponents;
+        private Canvas _Canvas;
         public static float GlobalScale = 1.0f;
     }
 }

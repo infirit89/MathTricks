@@ -14,17 +14,9 @@ namespace MathTricks
         {
             _Font = manager.Load<SpriteFont>("Arial");
             
-            const int buttonWidth = 200;
-            const int buttonHeight = 70;
+            const float buttonWidth = 0.5f;
+            const float buttonHeight = 0.5f;
 
-            Transform2D playButtonTransform = new Transform2D() 
-            {
-                Position = new Vector2(
-                                    _WindowSize.X / 2 - buttonWidth / 2,
-                                    _WindowSize.Y / 2 - buttonHeight * 2),
-
-                Size = new Vector2(buttonWidth, buttonHeight)
-            };
 
             Transform2D helpButtonTransform = new Transform2D() 
             {
@@ -35,29 +27,42 @@ namespace MathTricks
                 Size = new Vector2(buttonWidth, buttonHeight)
             };
 
-            Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
+            Texture2D buttonTexture = manager.Load<Texture2D>("niggaButton");
+
+            Transform2D playButtonTransform = new Transform2D() 
+            {
+                Position = new Vector2(
+                                    _WindowSize.X / 2 - (buttonTexture.Bounds.Width / 2 * buttonWidth),
+                                    _WindowSize.Y / 2 - (buttonTexture.Bounds.Height / 2 * buttonHeight)),
+
+                Size = new Vector2(buttonWidth, buttonHeight)
+            };
             
-            Button _PlayButton = new Button(
+            Button playButton = new Button(
                                         playButtonTransform,
                                         "Play",
                                         _Font,
-                                        _ButtonTexture);
-                                        
-            Button _HelpButton = new Button(
-                                        helpButtonTransform,
-                                        "Help",
-                                        _Font,
-                                        _ButtonTexture);
+                                        buttonTexture);
 
-            _PlayButton.OnButtonPressedEvent = () => 
+            _MainScreenManager.AddComponent(playButton);
+                  
+            // Button helpButton = new Button(
+            //                             helpButtonTransform,
+            //                             "Help",
+            //                             _Font,
+            //                             buttonTexture);
+
+            // _MainScreenManager.AddComponent(helpButton);
+
+            playButton.OnButtonPressedEvent = () => 
             {
                 ScreenManager.CurrentScreen = ScreenState.GameModes;
             };
 
-            _HelpButton.OnButtonPressedEvent = () => 
-            {
-                ScreenManager.CurrentScreen = ScreenState.HelpScreen;
-            };
+            // helpButton.OnButtonPressedEvent = () => 
+            // {
+            //     ScreenManager.CurrentScreen = ScreenState.HelpScreen;
+            // };
 
             Background = manager.Load<Texture2D>("MenuBg");
 

@@ -43,15 +43,10 @@ namespace MathTricks
                                 Texture2D texture = null) 
         {
             _SpriteBatch.Draw(
-                            texture == null ? _WhiteTexture : texture,
+                            texture ??_WhiteTexture,
                             transform.Position,
                             null,
-                            color,
-                            transform.Rotation,
-                            Vector2.Zero,
-                            transform.Size,
-                            SpriteEffects.None,
-                            0.0f);
+                            color, Rotation, default, transform.Size, SpriteEffects.None, 0.0f);
         }
 
         public static void AddText(
@@ -62,6 +57,7 @@ namespace MathTricks
             => _SpriteBatch.DrawString(font, text, position, color);
 
         private static SpriteBatch _SpriteBatch;
+        static float Rotation;
         private static Texture2D _WhiteTexture;
     }
 }
