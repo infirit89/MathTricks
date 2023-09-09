@@ -18,7 +18,7 @@ namespace MathTricks
 
             _Text.Transform.Position = new Vector2(
                                                 _Text.Transform.Position.X,
-                                                _Text.Transform.Position.X - 50);
+                                                _Text.Transform.Position.Y - 50);
 
             base.OnLoad();
         }
@@ -29,19 +29,21 @@ namespace MathTricks
             _Font = manager.Load<SpriteFont>("Salvar");
             _Text = new Text("Player 1 has won!", _Font, _WindowSize)
             {
-                Color = Color.White
+                Color = Color.WhiteSmoke
             };
 
-            Transform2D buttonTransform = new Transform2D();
-            buttonTransform.Position = new Vector2(
-                                                _WindowSize.X / 2 - _ButtonWidth / 2,
-                                                _WindowSize.Y / 2);
+            _Manager.AddComponent(_Text);
 
-            buttonTransform.Size = new Vector2(
-                                            _ButtonWidth,
-                                            _ButtonHeight);
+            Transform2D buttonTransform = new Transform2D
+            {
+                Position = new Vector2(
+                                    _WindowSize.X / 2 - _ButtonWidth / 2,
+                                    _WindowSize.Y / 2),
 
-            Button MainMenu = new Button(
+                Size = new Vector2(_ButtonWidth, _ButtonHeight)
+            };
+
+            Button mainMenuButton = new Button(
                                     buttonTransform,
                                     "Main Menu",
                                     _Font,
@@ -51,6 +53,9 @@ namespace MathTricks
                                 () =>
                                     { ScreenManager.CurrentScreen = ScreenState.MainMenu; }
             };
+            mainMenuButton.Text.Color = Color.WhiteSmoke;
+
+            _Manager.AddComponent(mainMenuButton);
 
             Background = manager.Load<Texture2D>("bg");
             BackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);

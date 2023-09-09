@@ -11,14 +11,20 @@ namespace MathTricks
         private Point _WindowSize;
         private Rectangle _HelpButtonRectangle;
         
+        public HelpScreen(Point WindowSize)
+        {
+            _WindowSize = WindowSize; 
+            _HelpScreenManager = new UIManager();    
+        }
+
         public override void LoadContent(ContentManager manager) 
         {
-            _Font = manager.Load<SpriteFont>("Arial");
+            _Font = manager.Load<SpriteFont>("Salvar");
 
             const int offsetXAndEscapeButtonY = 10;
             const int offsetY = 50;
-            const int escapeButtonWidth = 50;
-            const int escapeButtonHeight = 20;
+            const int escapeButtonWidth = 70;
+            const int escapeButtonHeight = 40;
 
             Transform2D returnToMainMenuButtonTransform = new Transform2D() 
             {
@@ -32,16 +38,26 @@ namespace MathTricks
             };
 
             Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
-            Button _EscapeFromHelpScreenButton = new Button(
-                                                        returnToMainMenuButtonTransform,
+
+            Vector2 buttonOffset = new Vector2(10.0f, 10.0f);
+            Vector2 buttonSize = new Vector2(70.0f, 40.0f);
+            Button escapeFromHelpScreenButton = new Button(
+                                                        buttonOffset,
+                                                        buttonSize,
                                                         "Back",
                                                         _Font,
-                                                        _ButtonTexture);
-
-            _EscapeFromHelpScreenButton.OnButtonPressedEvent = () => 
+                                                        Anchor.TopRight,
+                                                        _ButtonTexture)
             {
-                ScreenManager.CurrentScreen = ScreenState.MainMenu;
+                OnButtonPressedEvent = () =>
+                {
+                    ScreenManager.CurrentScreen = ScreenState.MainMenu;
+                }
             };
+            
+            escapeFromHelpScreenButton.Text.Color = Color.WhiteSmoke;
+
+            _HelpScreenManager.AddComponent(escapeFromHelpScreenButton);
 
             using (StreamReader streamReader = new StreamReader(@"Content/Help.txt"))
                 _HelpText = streamReader.ReadToEnd();
@@ -55,16 +71,10 @@ namespace MathTricks
                                         _WindowSize.X,
                                         _WindowSize.Y));
             text.Transform.Position = new Vector2(0, offsetY);
+            text.Color = Color.WhiteSmoke;
 
-            text.Color = Color.White;
+            _HelpScreenManager.AddComponent(text);
         }
-
-        public HelpScreen(Point WindowSize)
-        {
-            _WindowSize = WindowSize; 
-            _HelpScreenManager = new UIManager();    
-        }
-
 
         public override void Update() 
         {

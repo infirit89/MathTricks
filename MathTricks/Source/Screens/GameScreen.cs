@@ -76,6 +76,8 @@ namespace MathTricks
                                                 squareValue,
                                                 _ArialFont,
                                                 _Field[y, x].Transform);
+                    
+                    _GameScreenUIManager.AddComponent(_Field[y, x].Text);
                 }
             }
         }
@@ -177,8 +179,10 @@ namespace MathTricks
                                         Rectangle.Empty,
                                         false)
             {
-                Color = Color.White
+                Color = Color.WhiteSmoke
             };
+
+            _GameScreenUIManager.AddComponent(_Player1ScoreText);
 
             _Player1ScoreText.Transform.Position = new Vector2(scoreTextOffset, scoreTextOffset);
 
@@ -189,8 +193,10 @@ namespace MathTricks
                                         Rectangle.Empty,
                                         false)
             {
-                Color = Color.White
+                Color = Color.WhiteSmoke
             };
+
+            _GameScreenUIManager.AddComponent(_Player2ScoreText);
 
             _Player2ScoreText.Transform.Position = new Vector2(
                                                         scoreTextOffset, 
@@ -207,7 +213,7 @@ namespace MathTricks
 
         public override void LoadContent(ContentManager manager) 
         {
-            _ArialFont = manager.Load<SpriteFont>("Arial");
+            _ArialFont = manager.Load<SpriteFont>("Salvar");
             Background = manager.Load<Texture2D>("bg");
             BackgroundTransform = new Rectangle(new Point(0, 0), _WindowSize);
         }

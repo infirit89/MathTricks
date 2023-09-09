@@ -6,7 +6,6 @@ namespace MathTricks
 {
     public class Application : Game
     {
-        public static Application Instance => s_Instance;
 
         public Application()
         {
@@ -95,6 +94,10 @@ namespace MathTricks
 
             ScreenManager.OnResize(GraphicsDevice.Viewport);
         }
+
+        public static Application Instance => s_Instance;
+        public int WindowWidth => Window.ClientBounds.Width;
+        public int WindowHeight => Window.ClientBounds.Height;
 
         private static Application s_Instance;
         private GraphicsDeviceManager _GraphicsDeviceManager;

@@ -29,12 +29,12 @@ namespace MathTricks
         public static void End() => _SpriteBatch.End();
 
         public static void AddQuad(
-                                Rectangle transform,
+                                Rectangle destination,
                                 Color color,
                                 Texture2D texture = null)
             => _SpriteBatch.Draw(
                             texture == null ? _WhiteTexture : texture,
-                            transform,
+                            destination,
                             color);
 
         public static void AddQuad(
@@ -42,11 +42,10 @@ namespace MathTricks
                                 Color color,
                                 Texture2D texture = null) 
         {
-            _SpriteBatch.Draw(
-                            texture ??_WhiteTexture,
-                            transform.Position,
-                            null,
-                            color, Rotation, default, transform.Size, SpriteEffects.None, 0.0f);
+            Rectangle destination = new Rectangle(
+                                            transform.Position.ToPoint(),
+                                            transform.Size.ToPoint());
+            AddQuad(destination, color, texture);
         }
 
         public static void AddText(
@@ -57,7 +56,6 @@ namespace MathTricks
             => _SpriteBatch.DrawString(font, text, position, color);
 
         private static SpriteBatch _SpriteBatch;
-        static float Rotation;
         private static Texture2D _WhiteTexture;
     }
 }

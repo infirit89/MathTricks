@@ -10,7 +10,7 @@ namespace MathTricks
         private Point _WindowSize;
         public override void LoadContent(ContentManager manager) 
         {
-            _Font = manager.Load<SpriteFont>("Arial");
+            _Font = manager.Load<SpriteFont>("Salvar");
             
             const int buttonWidth = 200;
             const int buttonHeight = 70;
@@ -33,26 +33,34 @@ namespace MathTricks
                 Size = new Vector2(buttonWidth, buttonHeight)
             };
 
-            Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
-            Button _SinglePlayerButton = new Button(
+            Texture2D buttonTexture = manager.Load<Texture2D>("niggaButton");
+            Button singlePlayerButton = new Button(
                                                 singlePlayerButtonTransform,
                                                 "SinglePlayer",
                                                 _Font,
-                                                _ButtonTexture);
+                                                buttonTexture);
 
-            Button _MultiPlayerButton = new Button(
+            singlePlayerButton.Text.Color = Color.WhiteSmoke;
+
+            _GameModeScreenManager.AddComponent(singlePlayerButton);
+
+            Button multiPlayerButton = new Button(
                                                 multiPlayerButtonTransform,
                                                 "MultiPlayer",
                                                 _Font,
-                                                _ButtonTexture);
+                                                buttonTexture);
 
-            _SinglePlayerButton.OnButtonPressedEvent = () => 
+            multiPlayerButton.Text.Color = Color.WhiteSmoke;
+
+            _GameModeScreenManager.AddComponent(multiPlayerButton);
+
+            singlePlayerButton.OnButtonPressedEvent = () => 
             {
                 Globals.IsSinglePlayer = true;
                 ScreenManager.CurrentScreen = ScreenState.Settings;
             };
 
-            _MultiPlayerButton.OnButtonPressedEvent = () =>
+            multiPlayerButton.OnButtonPressedEvent = () =>
             {
                 Globals.IsSinglePlayer = false;
                 ScreenManager.CurrentScreen = ScreenState.Settings;

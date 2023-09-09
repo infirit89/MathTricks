@@ -17,21 +17,20 @@ namespace MathTricks
             _Font = font;
             _Bounds = bounds;
             _IsCenterTransform = centerTransform;
-
-            if(centerTransform)
-                CenterTransform(_Bounds);
+            
             Color = Color.Black;
         }
 
         public Text(string text, SpriteFont font, Point bounds)
             : this(text, font, new Rectangle(new Point(0, 0), bounds)) { }
 
-        public override void Update()
-        { }
-
         public override void Draw()
         {
+            if(_IsCenterTransform)
+                CenterTransform(_Bounds == Rectangle.Empty ? _Parent.GetBoundingBox() : _Bounds);
             Renderer.AddText(Transform.Position, _Text, _Font, Color);
+
+            base.Draw();
         }
         public void CenterTransform(Rectangle bounds) 
         {

@@ -10,7 +10,7 @@ namespace MathTricks
         }
 
         public void AddComponent(UIComponent component) => _Canvas.AddChild(component);
-        public void ClearComponents() => _Canvas.Children.Clear();
+        public void ClearComponents() => _Canvas.ClearChildren();
 
         public void Update()
         {
