@@ -71,13 +71,18 @@ namespace MathTricks
                         squareValue = $"{action} {number}";
                     }
                     _Field[y, x] = new Square(squarePos, _SquareSize);
+                    _GameScreenUIManager.AddComponent(_Field[y, x].Image);
+
+                    if(y == 0 && x == 0)
+                        _Field[y, x].Image.Color = _PlayerColor[0];
+                    else if(y == Globals.FieldHeight - 1 && x == Globals.FieldWidth - 1)
+                        _Field[y, x].Image.Color = _PlayerColor[1];
 
                     _Field[y, x].Text = new Text(
                                                 squareValue,
-                                                _ArialFont,
-                                                _Field[y, x].Transform);
+                                                _ArialFont, Rectangle.Empty);
                     
-                    _GameScreenUIManager.AddComponent(_Field[y, x].Text);
+                    _Field[y, x].Image.AddChild(_Field[y, x].Text);
                 }
             }
         }
@@ -156,7 +161,7 @@ namespace MathTricks
                                             _PlayerSize, 
                                             _Field[0, 0].Transform.Location, 
                                             _SquareSize),
-                                _PlayerSize, Color.Blue);
+                                _PlayerSize, new Color(Color.Blue, 0.5f));
 
             _Player2 = new Player(
                                 GetCeneteredPlayerPosition(
@@ -165,7 +170,7 @@ namespace MathTricks
                                                 Globals.FieldHeight - 1,
                                                 Globals.FieldWidth - 1].Transform.Location,
                                             _SquareSize),
-                                _PlayerSize, Color.Yellow);
+                                _PlayerSize, new Color(Color.Yellow, 0.5f));
 
             _Field[0, 0].PlayerIndex = 0;
             _Field[Globals.FieldHeight - 1, Globals.FieldWidth - 1].PlayerIndex = 1;
@@ -252,28 +257,10 @@ namespace MathTricks
         {
             Renderer.AddQuad(BackgroundTransform, Color.White, Background);
 
-            for (int y = 0; y < _Field.GetLength(0); y++) 
-            {
-                for (int x = 0; x < _Field.GetLength(1); x++) 
-                {
-                    Color currentSquareColor = Color.White;
-
-                    if (_Field[y, x].PlayerIndex != -1)
-                        currentSquareColor = _PlayerColor[_Field[y, x].PlayerIndex];
-
-                    if (y == 0 && x == 0)
-                        currentSquareColor = _PlayerColor[0];
-                    else if (y == Globals.FieldHeight - 1 && x == Globals.FieldWidth - 1)
-                        currentSquareColor = _PlayerColor[1];
-
-                    Renderer.AddQuad(_Field[y, x].Transform, currentSquareColor);
-                } 
-            }
+            _GameScreenUIManager.Draw();
 
             _Player1.Draw();
             _Player2.Draw();
-
-            _GameScreenUIManager.Draw();
         }
 
         private Color GetCurrentPlayerColor()
@@ -327,6 +314,7 @@ namespace MathTricks
                         _Player2ScoreText.Value = $"Player 2: {_Player2.Score}";
                     }
                     _Field[ind.Y, ind.X].PlayerIndex = _PlayerTurnCounter % 2;
+                    _Field[ind.Y, ind.X].Image.Color = _PlayerColor[_PlayerTurnCounter % 2];
                     _PlayerTurnCounter++;
                     return true;
                 }

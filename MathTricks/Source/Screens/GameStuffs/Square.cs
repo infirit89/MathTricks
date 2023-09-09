@@ -6,11 +6,13 @@ namespace MathTricks
     {
         public Square(Vector2 squarePos, int squareSize)
         {
-            Transform = new Rectangle(squarePos.ToPoint(), new Point(squareSize, squareSize));
+            Image = new Image(squarePos, new Vector2(squareSize), null);
             PlayerIndex = -1;
         }
 
-        public Rectangle Transform { get; private set; }
+        public Rectangle Transform => Image.GetBoundingBox();
+
+        public Image Image;
         public Text Text;
         public int PlayerIndex;
     }

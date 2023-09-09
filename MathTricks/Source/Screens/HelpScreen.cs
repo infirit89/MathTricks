@@ -23,19 +23,6 @@ namespace MathTricks
 
             const int offsetXAndEscapeButtonY = 10;
             const int offsetY = 50;
-            const int escapeButtonWidth = 70;
-            const int escapeButtonHeight = 40;
-
-            Transform2D returnToMainMenuButtonTransform = new Transform2D() 
-            {
-                Position = new Vector2(
-                                    _WindowSize.X - 
-                                        (escapeButtonWidth + 
-                                        offsetXAndEscapeButtonY), 
-                                    offsetXAndEscapeButtonY),
-
-                Size = new Vector2(escapeButtonWidth, escapeButtonHeight)
-            };
 
             Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
 
@@ -54,7 +41,7 @@ namespace MathTricks
                     ScreenManager.CurrentScreen = ScreenState.MainMenu;
                 }
             };
-            
+
             escapeFromHelpScreenButton.Text.Color = Color.WhiteSmoke;
 
             _HelpScreenManager.AddComponent(escapeFromHelpScreenButton);
