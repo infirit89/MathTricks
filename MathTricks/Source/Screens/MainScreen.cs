@@ -39,9 +39,11 @@ namespace MathTricks
 
             
             Button playButton = new Button(
-                                        playButtonTransform,
+                                        Vector2.Zero,
+                                        new Vector2(buttonWidth, buttonHeight),
                                         "Play",
                                         _Font,
+                                        Anchor.Center,
                                         buttonTexture);
 
             playButton.Text.Color = Color.WhiteSmoke;
@@ -69,6 +71,9 @@ namespace MathTricks
             };
 
             Background = manager.Load<Texture2D>("MenuBg");
+
+            VerticalLayout layout = new VerticalLayout(Vector2.Zero, Anchor.CenterTop);
+            _MainScreenManager.AddComponent(layout);
 
             int aspectRatio = _WindowSize.X / _WindowSize.Y;
             // BackgroundTransform = new Rectangle();

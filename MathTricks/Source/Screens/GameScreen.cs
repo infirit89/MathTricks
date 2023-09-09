@@ -161,7 +161,7 @@ namespace MathTricks
                                             _PlayerSize, 
                                             _Field[0, 0].Transform.Location, 
                                             _SquareSize),
-                                _PlayerSize, new Color(Color.Blue, 0.5f));
+                                _PlayerSize, Color.Blue);
 
             _Player2 = new Player(
                                 GetCeneteredPlayerPosition(
@@ -170,7 +170,7 @@ namespace MathTricks
                                                 Globals.FieldHeight - 1,
                                                 Globals.FieldWidth - 1].Transform.Location,
                                             _SquareSize),
-                                _PlayerSize, new Color(Color.Yellow, 0.5f));
+                                _PlayerSize, Color.Yellow);
 
             _Field[0, 0].PlayerIndex = 0;
             _Field[Globals.FieldHeight - 1, Globals.FieldWidth - 1].PlayerIndex = 1;

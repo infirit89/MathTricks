@@ -14,7 +14,7 @@ namespace MathTricks
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            Window.ClientSizeChanged += OnResize;
+            Window.ClientSizeChanged += OnResize;  
         }
 
         protected override void Initialize()
@@ -33,7 +33,7 @@ namespace MathTricks
 
             ScreenManager.AddScreen(
                                 ScreenState.HelpScreen,
-                                new HelpScreen(Window.ClientBounds.Size));
+                                new HelpScreen());
 
             ScreenManager.AddScreen(
                                 ScreenState.GameScreen,

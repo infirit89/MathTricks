@@ -9,7 +9,11 @@ namespace MathTricks
     enum Anchor 
     {
         None = 0,
-        TopRight
+        TopRight,
+        TopLeft,
+        Center,
+        CenterTop,
+        CenterBottom
     }
 
     class UIComponent
@@ -97,6 +101,30 @@ namespace MathTricks
                 {
                     position.X = (int)(parentRect.Width - (size.X + _Offset.X));
                     position.Y = (int)_Offset.Y;
+                    break;
+                }
+                case Anchor.TopLeft: 
+                {
+                    position.X = (int)_Offset.X;
+                    position.Y = (int)_Offset.Y;
+                    break;
+                }
+                case Anchor.Center: 
+                {
+                    position.X = (int)(parentRect.Width / 2 - ((size.X / 2) + _Offset.X));
+                    position.Y = (int)(parentRect.Height / 2 - ((size.Y / 2) + _Offset.Y));
+                    break;
+                }
+                case Anchor.CenterTop: 
+                {
+                    position.X = (int)(parentRect.Width / 2 - ((size.X / 2) + _Offset.X));
+                    position.Y = (int)_Offset.Y;
+                    break;
+                }
+                case Anchor.CenterBottom: 
+                {
+                    position.X = (int)(parentRect.Width / 2 - ((size.X / 2) + _Offset.X));
+                    position.Y = (int)(parentRect.Height - (size.Y + _Offset.Y));
                     break;
                 }
             }

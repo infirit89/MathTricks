@@ -23,7 +23,7 @@ namespace MathTricks
 
         public static void Begin() 
                 => _SpriteBatch.Begin(
-                                    SpriteSortMode.Deferred,
+                                    SpriteSortMode.BackToFront,
                                     null,
                                     SamplerState.PointClamp);
         public static void End() => _SpriteBatch.End();
@@ -31,11 +31,17 @@ namespace MathTricks
         public static void AddQuad(
                                 Rectangle destination,
                                 Color color,
-                                Texture2D texture = null)
+                                Texture2D texture = null,
+                                float layerDepth = 0.3f)
             => _SpriteBatch.Draw(
                             texture == null ? _WhiteTexture : texture,
                             destination,
-                            color);
+                            null,
+                            color,
+                            0.0f,
+                            Vector2.Zero,
+                            SpriteEffects.None,
+                            layerDepth);
 
         public static void AddQuad(
                                 Transform2D transform,
@@ -52,8 +58,18 @@ namespace MathTricks
                                 Vector2 position,
                                 string text,
                                 SpriteFont font,
-                                Color color)
-            => _SpriteBatch.DrawString(font, text, position, color);
+                                Color color,
+                                float layerDepth = 0.0f)
+            => _SpriteBatch.DrawString(
+                                    font,
+                                    text,
+                                    position,
+                                    color,
+                                    0.0f,
+                                    default,
+                                    1.0f,
+                                    SpriteEffects.None,
+                                    layerDepth);
 
         private static SpriteBatch _SpriteBatch;
         private static Texture2D _WhiteTexture;

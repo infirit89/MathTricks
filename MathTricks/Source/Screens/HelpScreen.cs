@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,12 +7,9 @@ namespace MathTricks
 {
     class HelpScreen : Screen
     {
-        private Point _WindowSize;
-        private Rectangle _HelpButtonRectangle;
         
-        public HelpScreen(Point WindowSize)
+        public HelpScreen()
         {
-            _WindowSize = WindowSize; 
             _HelpScreenManager = new UIManager();    
         }
 
@@ -21,10 +17,7 @@ namespace MathTricks
         {
             _Font = manager.Load<SpriteFont>("Salvar");
 
-            const int offsetXAndEscapeButtonY = 10;
-            const int offsetY = 50;
-
-            Texture2D _ButtonTexture = manager.Load<Texture2D>("niggaButton");
+            Texture2D buttonTexture = manager.Load<Texture2D>("niggaButton");
 
             Vector2 buttonOffset = new Vector2(10.0f, 10.0f);
             Vector2 buttonSize = new Vector2(70.0f, 40.0f);
@@ -34,7 +27,7 @@ namespace MathTricks
                                                         "Back",
                                                         _Font,
                                                         Anchor.TopRight,
-                                                        _ButtonTexture)
+                                                        buttonTexture)
             {
                 OnButtonPressedEvent = () =>
                 {
@@ -46,19 +39,17 @@ namespace MathTricks
 
             _HelpScreenManager.AddComponent(escapeFromHelpScreenButton);
 
+            string helpText;
             using (StreamReader streamReader = new StreamReader(@"Content/Help.txt"))
-                _HelpText = streamReader.ReadToEnd();
+                helpText = streamReader.ReadToEnd();
 
             Text text = new Text(
-                            _HelpText,
+                            helpText,
                             _Font,
-                            new Rectangle(
-                                        offsetXAndEscapeButtonY,
-                                        offsetY,
-                                        _WindowSize.X,
-                                        _WindowSize.Y));
-            text.Transform.Position = new Vector2(0, offsetY);
-            text.Color = Color.WhiteSmoke;
+                            Rectangle.Empty)
+            {
+                Color = Color.WhiteSmoke
+            };
 
             _HelpScreenManager.AddComponent(text);
         }
@@ -75,6 +66,5 @@ namespace MathTricks
 
         private UIManager _HelpScreenManager;
         private SpriteFont _Font;
-        private string _HelpText;
     }
 }

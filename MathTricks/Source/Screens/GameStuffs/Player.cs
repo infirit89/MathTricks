@@ -15,7 +15,7 @@ namespace MathTricks
 
         public void Draw()
         {
-            Renderer.AddQuad(_Transform, _PlayerColor, _PlayerTexture);
+            Renderer.AddQuad(_Transform, _PlayerColor, _PlayerTexture, 0.2f);
         }
 
         public Color GetPlayerColor() => _PlayerColor;

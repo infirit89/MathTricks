@@ -34,6 +34,26 @@ namespace MathTricks
             };
 
             Texture2D buttonTexture = manager.Load<Texture2D>("niggaButton");
+
+            Vector2 buttonOffset = new Vector2(10.0f, 10.0f);
+            Vector2 buttonSize = new Vector2(70.0f, 40.0f);
+            Button returnToMainMenuButton = new Button(
+                                                    buttonOffset,
+                                                    buttonSize,
+                                                    "Back",
+                                                    _Font,
+                                                    Anchor.TopLeft,
+                                                    buttonTexture) 
+            {
+                OnButtonPressedEvent = () => 
+                {
+                    ScreenManager.CurrentScreen = ScreenState.MainMenu;
+                }    
+            };
+            returnToMainMenuButton.Text.Color = Color.WhiteSmoke;
+            
+            _GameModeScreenManager.AddComponent(returnToMainMenuButton);
+
             Button singlePlayerButton = new Button(
                                                 singlePlayerButtonTransform,
                                                 "SinglePlayer",
