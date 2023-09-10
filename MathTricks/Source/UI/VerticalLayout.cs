@@ -1,26 +1,38 @@
 using Microsoft.Xna.Framework;
 
-/*
-    TODO:
-    Center anchor
-    Test
-    Vertical layout where children are positioned based on an alignment
-*/
-
 namespace MathTricks
 {
     class VerticalLayout : UIComponent
     {
         public VerticalLayout(
                             Vector2 offset,
-                            Anchor anchor = Anchor.None)
-            : base(offset, Vector2.Zero, anchor)
-        {
-        }
+                            Vector2 size,
+                            Anchor anchor = Anchor.None,
+                            Sizing sizing = Sizing.None)
+            : base(offset, size, anchor, sizing)
+        { }
 
-        public override void Draw() 
+        public override Rectangle GetBoundingBox() 
         {
-            Renderer.AddQuad(GetBoundingBox(), Color.White);
+            Rectangle rect = base.GetBoundingBox();
+
+            float line = 0.0f;
+            for(int i = 0; i < _Children.Count; i++) 
+            {
+                UIComponent child = _Children[i];
+                Vector2 position = child.Transform.Position;
+                Vector2 size = child.Transform.Size;
+                position.X = rect.X - (size.X / 2);
+                position.Y = rect.Height / 2 - 
+                                ((size.Y / 2) * 
+                                (_Children.Count - (i * 2))) +
+                                line;
+
+                line += Spacing;
+                child.Transform.Position = position;
+            }
+
+            return rect;
         }
 
         public float Spacing = 0.0f;

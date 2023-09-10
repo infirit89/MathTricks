@@ -17,23 +17,14 @@ namespace MathTricks
             const int buttonWidth = 200;
             const int buttonHeight = 70;
 
-            Transform2D playButtonTransform = new Transform2D() 
-            {
-                Position = new Vector2(
-                                    _WindowSize.X / 2 - buttonWidth / 2,
-                                    _WindowSize.Y / 2 - buttonHeight * 2),
-
-                Size = new Vector2(buttonWidth, buttonHeight)
-            };
-
-            Transform2D helpButtonTransform = new Transform2D() 
-            {
-                Position = new Vector2(
-                                    _WindowSize.X / 2 - buttonWidth / 2,
-                                    _WindowSize.Y / 2),
-
-                Size = new Vector2(buttonWidth, buttonHeight)
-            };
+            VerticalLayout layout = new VerticalLayout(
+                                                    Vector2.Zero,
+                                                    new Vector2(10.0f, 10.0f),
+                                                    Anchor.CenterTop,
+                                                    Sizing.ParentHeight);
+            layout.Spacing = 10.0f;
+                                                    
+            _MainScreenManager.AddComponent(layout);
 
             Texture2D buttonTexture = manager.Load<Texture2D>("niggaButton");
 
@@ -43,22 +34,22 @@ namespace MathTricks
                                         new Vector2(buttonWidth, buttonHeight),
                                         "Play",
                                         _Font,
-                                        Anchor.Center,
+                                        Anchor.None,
                                         buttonTexture);
-
             playButton.Text.Color = Color.WhiteSmoke;
 
-            _MainScreenManager.AddComponent(playButton);
+            layout.AddChild(playButton);
                   
             Button helpButton = new Button(
-                                        helpButtonTransform,
+                                        Vector2.Zero,
+                                        new Vector2(buttonWidth, buttonHeight),
                                         "Help",
                                         _Font,
+                                        Anchor.None,
                                         buttonTexture);
-
             helpButton.Text.Color = Color.WhiteSmoke;
 
-            _MainScreenManager.AddComponent(helpButton);
+            layout.AddChild(helpButton);
 
             playButton.OnButtonPressedEvent = () => 
             {
@@ -71,9 +62,6 @@ namespace MathTricks
             };
 
             Background = manager.Load<Texture2D>("MenuBg");
-
-            VerticalLayout layout = new VerticalLayout(Vector2.Zero, Anchor.CenterTop);
-            _MainScreenManager.AddComponent(layout);
 
             int aspectRatio = _WindowSize.X / _WindowSize.Y;
             // BackgroundTransform = new Rectangle();

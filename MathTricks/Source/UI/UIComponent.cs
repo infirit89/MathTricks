@@ -16,6 +16,14 @@ namespace MathTricks
         CenterBottom
     }
 
+    enum Sizing 
+    {
+        None = 0,
+        ParentWidth,
+        ParentHeight,
+        ParentSize
+    }
+
     class UIComponent
     {
         public UIComponent(Vector2 position, Vector2 size) 
@@ -36,7 +44,11 @@ namespace MathTricks
             _Anchor = anchor;
         }
 
-        public UIComponent(Vector2 offset, Vector2 size, Anchor anchor = Anchor.None) 
+        public UIComponent(
+                        Vector2 offset,
+                        Vector2 size,
+                        Anchor anchor = Anchor.None,
+                        Sizing sizing = Sizing.None) 
         {
             Transform = new Transform2D() 
             {
@@ -47,11 +59,16 @@ namespace MathTricks
             _Offset = offset;
             _Children = new List<UIComponent>();
             _Anchor = anchor;
+            _Sizing = sizing;
         }
 
         public virtual void Draw() 
         {
-            // draw children:
+            DrawChildren();
+        }
+
+        protected virtual void DrawChildren() 
+        {
             foreach(var child in _Children)
                 child.Draw();
         }
@@ -95,6 +112,26 @@ namespace MathTricks
             Point position = Transform.Position.ToPoint();
             Point size = Transform.Size.ToPoint();
 
+            switch(_Sizing) 
+            {
+                case Sizing.ParentWidth:
+                {
+                    size.X = parentRect.Width;
+                    break;
+                }
+                case Sizing.ParentHeight:
+                {
+                    size.Y = parentRect.Height;
+                    break;
+                }
+                case Sizing.ParentSize:
+                {
+                    size.X = parentRect.Width;
+                    size.Y = parentRect.Height;
+                    break;
+                }
+            }
+
             switch(_Anchor) 
             {
                 case Anchor.TopRight: 
@@ -135,10 +172,13 @@ namespace MathTricks
         }
 
         public Transform2D Transform;
+
         protected UIComponent _Parent = null;
 
-        private List<UIComponent> _Children;
+        protected List<UIComponent> _Children;
+
         private Anchor _Anchor;
+        private Sizing _Sizing;
         private Vector2 _Offset;
     }
 }
